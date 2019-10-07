@@ -8,34 +8,67 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
+    <script type="text/javascript" src="/javascripts/mapboxgl-control-minimap.js"></script>
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css'/>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css' type='text/css'/>
     <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-    <div id='before' class='map'></div>
-    <div id='after' class='map'></div>
+    <div id='satellite' class='map'></div>
+    <div id='streets' class='map'></div>
+
+    <div class='map-overlay top'>
+      <div class='map-overlay-inner'>
+        <fieldset>
+          <label>Inspection Map</label>
+          <select id='layer' name='layer' onchange="changeLayer();" onfocus="this.selectedIndex = -1;">
+            <option value='satellite'>satellite-v9</option>
+            <option value='building'>streets-v11</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label>Tools</label>
+          <div id='swatches'></div>
+        </fieldset>
+        <label>Geometry</label>
+        <text id='info'></text>
+        <label>Metrics</label>
+        <text id='metrics'></text>
+      </div>
+    </div>
+
     <div class='calculation-box'>
       <p>Draw a polygon using the draw tools.</p>
       <div id='calculated-area'></div>
     </div>
+
     <script>
       mapboxgl.accessToken = 'pk.eyJ1IjoibXlzb3JuMSIsImEiOiIwODY0MDQ0ZTdiYTViYmU0ZTZiOGI4OTU5MjQxZGY1NCJ9.elqMFi4oQtFFjYXbW2Oxig';
 
-      var beforeMap = new mapboxgl.Map({
-        container: 'before',
+      var satelliteMap = new mapboxgl.Map({
+        container: 'satellite',
         style: 'mapbox://styles/mapbox/satellite-v9',
         center: [-74.50, 40],
         zoom: 9
       });
-      var afterMap = new mapboxgl.Map({
-        container: 'after',
+      satelliteMap.on("style.load", function () {
+        // Possible position values are 'bottom-left', 'bottom-right', 'top-left', 'top-right'
+        satelliteMap.addControl(new mapboxgl.Minimap({
+            center: [-74.50, 40],
+            zoom: 4,
+            zoomLevels: []
+          }), 'bottom-left');
+        });
+
+      var streetsMap = new mapboxgl.Map({
+        container: 'streets',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [-74.50, 40],
         zoom: 9
       });
-      var map = new mapboxgl.Compare(beforeMap, afterMap, {
+
+      var map = new mapboxgl.Compare(satelliteMap, streetsMap, {
         // Set this to enable comparing two maps by mouse movement:
         // mousemove: true
       });
@@ -50,19 +83,24 @@
         }
       });
 
-      afterMap.addControl(draw);
-      afterMap.on('draw.create', updateArea);
-      afterMap.on('draw.delete', updateArea);
-      afterMap.on('draw.update', updateArea);
+      satelliteMap.addControl(draw);
+      satelliteMap.on('draw.create', updateArea);
+      satelliteMap.on('draw.delete', updateArea);
+      satelliteMap.on('draw.update', updateArea);
+
+      function changeLayer(obj){
+        var layerId = obj.value;
+        satelliteMap.setStyle('mapbox://styles/mapbox/' + layerId);
+      }
 
       function updateArea(e) {
         var data = draw.getAll();
-        var answer = document.getElementById('calculated-area');
+        var answer = document.getElementById('metrics');
         if (data.features.length > 0) {
           var area = turf.area(data);
           // restrict to area to 2 decimal points
           var rounded_area = Math.round(area*100)/100;
-          answer.innerHTML = '<p><strong>' + rounded_area + '</strong></p><p>square meters</p>';
+          answer.innerHTML = '<p>' + rounded_area + '</p><p>square meters</p>';
         } else {
           answer.innerHTML = '';
           if (e.type !== 'draw.delete') {
@@ -70,6 +108,17 @@
           }
         }
       }
+
+      satelliteMap.on('mousemove', function (e) {
+        document.getElementById('info').innerHTML =
+        'x: '+e.point.x+' '+'y: '+e.point.y+
+        // e.point is the x, y coordinates of the mousemove event relative
+        // to the top-left corner of the map
+        '<br />' +
+        'lat: '+e.lngLat.lng+'<br />'+
+        'long: '+e.lngLat.Lat
+        // e.lngLat is the longitude, latitude geographical position of the event
+      });
 
     </script>
   </body>
