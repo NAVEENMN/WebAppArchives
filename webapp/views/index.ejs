@@ -18,6 +18,12 @@
     <div id='satellite' class='map'></div>
     <div id='streets' class='map'></div>
 
+    <div id='cursor_info' class='map-overlay top'>
+      <div class='map-overlay-inner'>
+        <label>Inspection Map</label>
+      </div>
+    </div>
+
     <div class='map-overlay top'>
       <div class='map-overlay-inner'>
         <fieldset>
@@ -44,7 +50,14 @@
     </div>
 
     <script>
+
+      // --------------------
       mapboxgl.accessToken = 'pk.eyJ1IjoibXlzb3JuMSIsImEiOiIwODY0MDQ0ZTdiYTViYmU0ZTZiOGI4OTU5MjQxZGY1NCJ9.elqMFi4oQtFFjYXbW2Oxig';
+      var metrics_points = {
+        "type": "FeatureCollection",
+        "features": []
+      };
+      // --------------------
 
       var satelliteMap = new mapboxgl.Map({
         container: 'satellite',
@@ -52,15 +65,6 @@
         center: [-74.50, 40],
         zoom: 9
       });
-      satelliteMap.on("style.load", function () {
-        // Possible position values are 'bottom-left', 'bottom-right', 'top-left', 'top-right'
-        satelliteMap.addControl(new mapboxgl.Minimap({
-            center: [-74.50, 40],
-            zoom: 4,
-            zoomLevels: []
-          }), 'bottom-left');
-        });
-
       var streetsMap = new mapboxgl.Map({
         container: 'streets',
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -73,6 +77,43 @@
         // mousemove: true
       });
 
+      satelliteMap.on("style.load", function () {
+        // Possible position values are 'bottom-left', 'bottom-right', 'top-left', 'top-right'
+        satelliteMap.addControl(new mapboxgl.Minimap({
+            center: [-74.50, 40],
+            zoom: 4,
+            zoomLevels: []
+          }), 'bottom-left');
+
+        satelliteMap.addControl(draw);
+
+        satelliteMap.addSource("metrics_points", {
+            "type": "geojson",
+            "data": metrics_points
+        });
+
+        satelliteMap.addLayer({
+          "id": "metrics-labels",
+          "type": "symbol",
+          "source": "metrics_points",
+          "layout": {
+            "text-field": ["get", "description"],
+            "text-variable-anchor": ["top", "bottom", "left", "right"],
+            "text-radial-offset": 0.5,
+            "text-justify": "auto"
+          },
+          "paint":{
+            "text-color": "#ffffff",
+          }
+
+        });
+
+      });
+
+      satelliteMap.on('draw.create', computeMetrics);
+      satelliteMap.on('draw.delete', updateArea);
+      satelliteMap.on('draw.update', updateArea);
+
       var draw = new MapboxDraw({
         displayControlsDefault: true,
         controls: {
@@ -83,19 +124,102 @@
         }
       });
 
-      satelliteMap.addControl(draw);
-      satelliteMap.on('draw.create', updateArea);
-      satelliteMap.on('draw.delete', updateArea);
-      satelliteMap.on('draw.update', updateArea);
-
       function changeLayer(obj){
         var layerId = obj.value;
         satelliteMap.setStyle('mapbox://styles/mapbox/' + layerId);
       }
 
+      // https://turfjs.org/docs/
+      function computeDistance(from_location, to_location) {
+        var from = turf.point(from_location);
+        var to = turf.point(to_location);
+        var options = {units: 'miles'};
+        // you add extra args to convert units.
+        var distance = turf.distance(from, to);
+        distance = Math.round(distance * 100) / 100; // rounding to 2 decimals
+        distance = String(distance) + " Km";
+        return distance;
+      }
+
+      function computeLength(list_of_coordinates) {
+        var line = turf.lineString(list_of_coordinates);
+        var length = turf.lineDistance(line);
+        length = Math.round(length * 100) / 100; // rounding to 2 decimals
+        length = String(length) + " Km";
+        return length;
+      }
+
+      function computeArea(list_of_coordinates) {
+        var area = turf.area(list_of_coordinates);
+        area = Math.round(area * 100) / 100; // rounding to 2 decimals
+        area = String(area) + " Sqmt";
+        return area;
+      }
+
+      function constructMetricPoint(coordinate, metric) {
+        obj = new Object();
+        obj["type"] = "Feature";
+        obj["properties"] = {"description": metric};// "icon": "for icons"
+        obj["geometry"] = {"type": "Point", "coordinates": coordinate};
+        return obj;
+      }
+
+      function drawMetricPoints(data_source){
+        // Add a GeoJSON source containing place coordinates and information.
+        satelliteMap.getSource('metrics_points').setData(data_source);
+      }
+
+      function appenddistancesforsegments(coordinates, metrics_points) {
+        var idx_a = 0;
+        var idx_b = 0;
+        for (idx_a=0,idx_b=1; idx_b<coordinates.length; idx_a++, idx_b++) {
+          var distance = computeDistance(coordinates[idx_a], coordinates[idx_b]);
+          var midpoint = turf.midpoint(coordinates[idx_a], coordinates[idx_b]);
+          metric_point = constructMetricPoint(midpoint.geometry.coordinates, distance);
+          metrics_points.features.push(metric_point);
+        }
+      }
+
+      function computeMetrics(e) {
+        var answer = document.getElementById('metrics');
+        var data = draw.getAll();
+        // remove all previous metrics
+        while (metrics_points.features.length > 0) {
+            metrics_points.features.pop();
+        }
+        // compute new metrics
+        for (var i=0; i<data.features.length; i++) {
+          var feature = data.features[i];
+          if (feature.geometry.type == "LineString") {
+            var coordinates = feature.geometry.coordinates;
+            // compute distances between each segements of line
+            // and append them to metrics_points
+            appenddistancesforsegments(coordinates, metrics_points);
+            // computer the total distance
+            var length = computeLength(coordinates);
+            var endpoint = coordinates[coordinates.length-1];
+            metric_point = constructMetricPoint(endpoint, length);
+            metrics_points.features.push(metric_point);
+          } else if (feature.geometry.type == "Polygon") {
+            var coordinates = feature.geometry.coordinates[0];
+            // compute distances between each segements of line
+            // and append them to metrics_points
+            appenddistancesforsegments(coordinates, metrics_points);
+            // compute the area and append it to metrics_points
+            area = computeArea(feature);
+            var centroid = turf.centroid(feature);
+            metric_point = constructMetricPoint(centroid.geometry.coordinates, area);
+            metrics_points.features.push(metric_point);
+          }
+        }
+
+        drawMetricPoints(metrics_points);
+      }
+
       function updateArea(e) {
         var data = draw.getAll();
         var answer = document.getElementById('metrics');
+
         if (data.features.length > 0) {
           var area = turf.area(data);
           // restrict to area to 2 decimal points
@@ -109,7 +233,14 @@
         }
       }
 
+      satelliteMap.on('click', function (e) {
+
+      });
+
+
+
       satelliteMap.on('mousemove', function (e) {
+
         document.getElementById('info').innerHTML =
         'x: '+e.point.x+' '+'y: '+e.point.y+
         // e.point is the x, y coordinates of the mousemove event relative
@@ -119,6 +250,8 @@
         'long: '+e.lngLat.Lat
         // e.lngLat is the longitude, latitude geographical position of the event
       });
+
+
 
     </script>
   </body>
