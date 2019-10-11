@@ -33,22 +33,10 @@
             <option value='building'>streets-v11</option>
           </select>
         </fieldset>
-        <fieldset>
-          <label>Tools</label>
-          <div id='swatches'></div>
-        </fieldset>
         <label>Geometry</label>
         <text id='info'></text>
-        <label>Metrics</label>
-        <text id='metrics'></text>
       </div>
     </div>
-
-    <div class='calculation-box'>
-      <p>Draw a polygon using the draw tools.</p>
-      <div id='calculated-area'></div>
-    </div>
-
     <script>
 
       // --------------------
@@ -103,16 +91,18 @@
             "text-justify": "auto"
           },
           "paint":{
-            "text-color": "#ffffff",
+            "text-color": "#FFFF52",
+            "text-halo-color": "#333301",
+            "text-halo-width": 0.5,
+            "text-halo-blur": 5
           }
-
         });
 
       });
 
       satelliteMap.on('draw.create', computeMetrics);
-      satelliteMap.on('draw.delete', updateArea);
-      satelliteMap.on('draw.update', updateArea);
+      satelliteMap.on('draw.delete', computeMetrics);
+      satelliteMap.on('draw.update', computeMetrics);
 
       var draw = new MapboxDraw({
         displayControlsDefault: true,
@@ -165,8 +155,7 @@
       }
 
       function drawMetricPoints(data_source){
-        // Add a GeoJSON source containing place coordinates and information.
-        satelliteMap.getSource('metrics_points').setData(data_source);
+
       }
 
       function appenddistancesforsegments(coordinates, metrics_points) {
@@ -214,24 +203,10 @@
         }
 
         drawMetricPoints(metrics_points);
+        // Add a GeoJSON source containing place coordinates and information.
+        satelliteMap.getSource('metrics_points').setData(metrics_points);
       }
 
-      function updateArea(e) {
-        var data = draw.getAll();
-        var answer = document.getElementById('metrics');
-
-        if (data.features.length > 0) {
-          var area = turf.area(data);
-          // restrict to area to 2 decimal points
-          var rounded_area = Math.round(area*100)/100;
-          answer.innerHTML = '<p>' + rounded_area + '</p><p>square meters</p>';
-        } else {
-          answer.innerHTML = '';
-          if (e.type !== 'draw.delete') {
-            alert("Use the draw tools to draw a polygon!");
-          }
-        }
-      }
 
       satelliteMap.on('click', function (e) {
 
@@ -240,14 +215,13 @@
 
 
       satelliteMap.on('mousemove', function (e) {
-
         document.getElementById('info').innerHTML =
         'x: '+e.point.x+' '+'y: '+e.point.y+
         // e.point is the x, y coordinates of the mousemove event relative
         // to the top-left corner of the map
         '<br />' +
-        'lat: '+e.lngLat.lng+'<br />'+
-        'long: '+e.lngLat.Lat
+        'lat: '+e.lngLat.lat+'<br />'+
+        'long: '+e.lngLat.lng
         // e.lngLat is the longitude, latitude geographical position of the event
       });
 
