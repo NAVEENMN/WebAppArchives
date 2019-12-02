@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include partials/admin/head %>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <% include partials/admin/appbar %>
+    </nav>
+    <!-- Sidebar -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <% include partials/admin/sidebar %>
+    </aside>
+    <!-- Appbody -->
+    <div id="appbody" class="content-wrapper">
+      <% include partials/admin/adminpage %>
+    </div>
+  </div>
+<% include partials/admin/scripts %>
+</body>
+</html>

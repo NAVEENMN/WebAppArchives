@@ -309,13 +309,23 @@ satelliteMap.on('click', function (e) {
   */
 });
 
+function post_data(uri, data){
+  axios.post(uri, data)
+  .then(function (response) {
+    console.log("posted: ", response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 var button = document.getElementById('btn-download');
 button.addEventListener('click', async _ => {
-  console.log('download map');
-  var img = satelliteMap.getCanvas().toDataURL('image/png');
-  const data = JSON.stringify({todo: 'Buy the milk'})
-  console.log(img);
-  return data;
+  console.log('sending map image.');
+  // Run the GraphQL query '{ hello }' and print out the response
+  var image_base64 = satelliteMap.getCanvas().toDataURL('image/png');
+  const data = {task: 'add_image_data', payload: { image_base64: image_base64}};
+  post_data('/api', data);
 });
 
 satelliteMap.on('mousemove', function (e) {
