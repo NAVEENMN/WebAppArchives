@@ -43,13 +43,12 @@ satelliteMap.on("style.load", function () {
     }), 'bottom-left');
   */
 
-
   satelliteMap.loadImage(yellow_dot_url, function(error, image) {
     if (error) throw error;
     satelliteMap.addImage('yellow_dot', image);
   });
 
-  satelliteMap.addControl(draw);
+  satelliteMap.addControl(draw, 'top-left');
 
   satelliteMap.addSource("metrics_points_attr", {"type": "geojson", "data": metrics_points_attr });
   satelliteMap.addLayer({
@@ -319,7 +318,7 @@ function post_data(uri, data){
   });
 }
 
-var button = document.getElementById('btn-download');
+var button = document.getElementById('btn-capture');
 button.addEventListener('click', async _ => {
   console.log('sending map image.');
   // Run the GraphQL query '{ hello }' and print out the response
@@ -329,12 +328,10 @@ button.addEventListener('click', async _ => {
 });
 
 satelliteMap.on('mousemove', function (e) {
-  document.getElementById('info').innerHTML =
-  'x: '+e.point.x+' '+'y: '+e.point.y+
-  // e.point is the x, y coordinates of the mousemove event relative
-  // to the top-left corner of the map
-  '<br />' +
-  'lat: '+e.lngLat.lat+'<br />'+
-  'long: '+e.lngLat.lng
-  // e.lngLat is the longitude, latitude geographical position of the event
+
+  document.getElementById('latitude_section').innerHTML = 'Latitude: '+e.lngLat.lat;
+  document.getElementById('longitude_section').innerHTML = 'Latitude: '+e.lngLat.lng;
+  document.getElementById('mouse_x_section').innerHTML = 'Mouse_x: '+e.point.x;
+  document.getElementById('mouse_y_section').innerHTML = 'Mouse_Y: '+e.point.y;
+
 });
