@@ -5,6 +5,23 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
+class User {
+  final String email;
+  final String password;
+
+  User(this.email, this.password);
+
+  User.fromJson(Map<String, dynamic> json)
+      : email = json['email'],
+        password = json['password'];
+
+  Map<String, dynamic> toJson() =>
+      {
+        'email': email,
+        'password': password,
+      };
+}
+
 class _LoginState extends State<Login> {
 
   final email_controller = TextEditingController();
@@ -43,7 +60,9 @@ class _LoginState extends State<Login> {
       color: Colors.lightGreen,
       onPressed: () {
         if (_formKey.currentState.validate()) {
-          print(email_controller.text);
+          User _user = User(email_controller.text, password_controller.text);
+          print(_user.toJson());
+          Navigator.pushNamed(context, '/Dashboard');
         }
       },
       child: Text(
@@ -80,7 +99,7 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: signupButton,
                   ),
-                  SizedBox(height: 50.0, width: 18.0),
+                  SizedBox(height: 30.0, width: 18.0),
                 ],
               ),
           ),
