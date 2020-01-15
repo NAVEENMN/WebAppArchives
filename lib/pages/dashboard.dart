@@ -11,7 +11,17 @@ class Dashboard extends StatefulWidget {
 Widget _buildCard(text) {
   return GestureDetector(
       child: Container(
-          child: Text('Hello', style: TextStyle(color: Colors.white),),
+          alignment: Alignment.bottomCenter,
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Varela',
+                color: Colors.white,
+                fontWeight:FontWeight.bold
+            ),
+          ),
           margin: EdgeInsets.all(10),
           width:150,
           height: 150,
@@ -63,19 +73,19 @@ class _DashboardState extends State<Dashboard> {
           Text(
             'Welcome',
             style: TextStyle(
-              fontFamily: 'Varela',
-              fontSize: 40,
-              fontWeight: FontWeight.bold
+                fontFamily: 'Varela',
+                fontSize: 40,
+                fontWeight: FontWeight.bold
             ),
           ),
           SizedBox(height: 15.0),
           Wrap(
             alignment: WrapAlignment.center,
             children: <Widget>[
-              _buildCard('A'),
-              _buildCard('B'),
-              _buildCard('C'),
-              _buildCard('D')
+              _buildCard('Research'),
+              _buildCard('Get a Doctor'),
+              _buildCard('Bio Markers'),
+              _buildCard('Order tests')
             ],
           )
         ],
