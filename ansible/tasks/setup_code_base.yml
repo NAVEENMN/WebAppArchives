@@ -14,7 +14,7 @@
   register: is_cloned
 
 - name: Clone the repo
-  shell: git clone '{{ cortex_repo_url }}'
+  shell: git clone '{{ webapp_repo_url }}'
   when: is_cloned.stat.exists == False
   args:
     chdir: "{{ home_dir }}/temp"

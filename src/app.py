@@ -8,6 +8,7 @@ from db import *
 from flask import request, render_template, url_for
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
+app = flask.Flask(__name__)
 
 @app.route("/user", methods=["POST"])
 def user():
