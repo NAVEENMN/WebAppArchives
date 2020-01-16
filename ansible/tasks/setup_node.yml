@@ -1,0 +1,23 @@
+- name: Update ubuntu
+  shell: apt-get update
+
+- name: Install node js
+  shell: apt-get -y install nodejs
+
+- name: Verify the install
+  shell: nodejs -v
+  register: node_version
+
+- debug:
+    msg: "node version: {{ node_version.stdout }}" 
+
+- name: Install npm
+  shell: apt-get -y install npm
+
+- name: Clone the app repo
+  shell: git clone "{{ webapp_repo_url }}"
+
+- name: Start server
+  shell: npm start
+  args:
+    chdir: /home/ubuntu/webadmin
