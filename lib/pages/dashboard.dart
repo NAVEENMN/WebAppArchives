@@ -6,9 +6,8 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-
 // Image.asset('assets/images/options/option_1.png', fit: BoxFit.cover)
-Widget _buildCard(text) {
+Widget _buildCard(context, option, text) {
   return GestureDetector(
       child: Container(
           alignment: Alignment.bottomCenter,
@@ -34,11 +33,16 @@ Widget _buildCard(text) {
           )
       ),
       onTap:(){
-        print("you clicked my");
+        if (option == 'opt_2') {
+          Navigator.pushNamed(context, '/Index ');
+        } else if (option == 'opt_1') {
+          print("you clicked my");
+        } else {
+          print("you clicked my");
+        }
       },
   );
 }
-
 
 class _DashboardState extends State<Dashboard> {
 
@@ -82,10 +86,10 @@ class _DashboardState extends State<Dashboard> {
           Wrap(
             alignment: WrapAlignment.center,
             children: <Widget>[
-              _buildCard('Research'),
-              _buildCard('Get a Doctor'),
-              _buildCard('Bio Markers'),
-              _buildCard('Order tests')
+              _buildCard(context,'opt_1','Research'),
+              _buildCard(context,'opt_2','Get a Doctor'),
+              _buildCard(context,'opt_3','Bio Markers'),
+              _buildCard(context,'opt_4','Order tests')
             ],
           )
         ],

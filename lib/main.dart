@@ -1,7 +1,25 @@
+import 'package:bio/pages/wrapper.dart';
 import 'package:flutter/material.dart';
+
+
+void main() => runApp(RootApp());
+
+class RootApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Wrapper(),
+    );
+  }
+}
+
+/*
+
 import 'package:bio/pages/loading.dart';
 import 'package:bio/pages/login.dart';
 import 'package:bio/pages/dashboard.dart';
+import 'package:bio/pages/index.dart';
+import 'package:bio/pages/call.dart';
 
 void main() => runApp(MaterialApp(
   home: Home(),
@@ -11,12 +29,14 @@ void main() => runApp(MaterialApp(
     '/Home' : (context) => Home(),
     '/Login' : (context) => Login(),
     '/Dashboard' : (context) => Dashboard(),
+    '/Index' : (context) => IndexPage(),
+    '/Call' : (context) => CallPage(),
   },
 ));
 
-class Home extends StatefulWidget {
+class Home1 extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState1();
 }
 
 class Api
@@ -25,7 +45,7 @@ class Api
   Api({this.context});
 }
 
-class _HomeState extends State<Home> {
+class _HomeState1 extends State<Home1> {
 
   @override
   void initState() {
@@ -43,3 +63,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+*/

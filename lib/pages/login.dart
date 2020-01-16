@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+var client = http.Client();
 
 class Login extends StatefulWidget {
   @override
@@ -36,6 +39,19 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
+  void get_data() async {
+    try {
+      var Response = await client.post(
+          'http://52.39.96.192/user',
+          body: {'name': 'doodle', 'color': 'blue'}
+          );
+      print(Response.body);
+      //print(await client.get(Response.body));
+    } finally {
+      client.close();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -62,6 +78,7 @@ class _LoginState extends State<Login> {
         if (_formKey.currentState.validate()) {
           User _user = User(email_controller.text, password_controller.text);
           print(_user.toJson());
+          get_data();
           Navigator.pushNamed(context, '/Dashboard');
         }
       },
