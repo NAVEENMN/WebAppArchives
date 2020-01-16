@@ -1,17 +1,16 @@
 import 'package:bio/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class SignUp extends StatefulWidget {
 
   final Function toggleView;
-  SignIn({this.toggleView});
+  SignUp({this.toggleView});
 
   @override
-  _SignInState createState() => _SignInState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
-
+class _SignUpState extends State<SignUp> {
   final AuthService _auth = AuthService();
   final email_controller = TextEditingController();
   final password_controller = TextEditingController();
@@ -46,7 +45,7 @@ class _SignInState extends State<SignIn> {
     );
 
     // Submit Button Section
-    final signinButton = RaisedButton(
+    final signupButton = RaisedButton(
       color: Colors.lightGreen,
       onPressed: () async {
         if (_formKey.currentState.validate()) {
@@ -64,7 +63,7 @@ class _SignInState extends State<SignIn> {
         }
       },
       child: Text(
-        "Sign In",
+        "Create account",
         style: TextStyle(
           color: Colors.white,
         ),
@@ -78,7 +77,7 @@ class _SignInState extends State<SignIn> {
         widget.toggleView();
       },
       child: Text(
-        "Sign Up",
+        "Sign In",
         style: TextStyle(
           color: Colors.green,
         ),
@@ -86,49 +85,50 @@ class _SignInState extends State<SignIn> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/background/background.png"),
-                fit: BoxFit.cover
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/background/background.png"),
+                  fit: BoxFit.cover
+              ),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
+                    child: emailField,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
+                    child: passwordField,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: signupButton,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Already a user?'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: toggleButton,
+                      )
+                    ],
+                  ),
+
+                  SizedBox(height: 30.0, width: 18.0),
+                ],
+              ),
             ),
           ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
-                  child: emailField,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
-                  child: passwordField,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: signinButton,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(' want a new account?'),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: toggleButton,
-                    )
-                  ],
-                ),
-                SizedBox(height: 30.0, width: 18.0),
-              ],
-            ),
-          ),
-        ),
-      )
+        )
     );
   }
 }
