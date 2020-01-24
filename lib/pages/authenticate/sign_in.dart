@@ -50,16 +50,9 @@ class _SignInState extends State<SignIn> {
       color: Colors.lightGreen,
       onPressed: () async {
         if (_formKey.currentState.validate()) {
-          //User _user = User(email_controller.text, password_controller.text);
-          //print(_user.toJson());
-          //get_data();
-          // if success result will be user else null
-          dynamic result = await _auth.signInAnon();
+          dynamic result = await _auth.signInWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
             print("Failed to Sign In");
-          } else {
-            print(result.uid);
-            Navigator.pushNamed(context, '/Dashboard');
           }
         }
       },
@@ -116,7 +109,7 @@ class _SignInState extends State<SignIn> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(' want a new account?'),
+                    Text('want a new account?'),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: toggleButton,

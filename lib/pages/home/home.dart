@@ -6,6 +6,41 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+Widget _getCard(context, main_text, sub_text) {
+  return Center(
+    child: Card(
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          print(main_text);
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                main_text,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                sub_text,
+                style: TextStyle(
+                  color: Colors.blueGrey
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 Widget _buildCard(context, option, text) {
   return GestureDetector(
     child: Container(
@@ -56,15 +91,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF21BFBD),
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.white,
-          title: Text(
-            'Report',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
+          backgroundColor: Color(0xFF21BFBD),
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back), onPressed: () {},
@@ -83,24 +113,51 @@ class _HomeState extends State<Home> {
         body: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
-            SizedBox(height: 15.0),
             Text(
-              'Welcome',
+              'I need help with..',
               style: TextStyle(
-                  fontFamily: 'Varela',
-                  fontSize: 40,
+                  fontFamily: 'Montserrat',
+                  color: Colors.white,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold
               ),
             ),
             SizedBox(height: 15.0),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                _buildCard(context,'opt_1','Research'),
-                _buildCard(context,'opt_2','Get a Doctor'),
-                _buildCard(context,'opt_3','Bio Markers'),
-                _buildCard(context,'opt_4','Order tests')
-              ],
+            Container(
+              height: MediaQuery.of(context).size.height-100,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: ListView(
+                padding: EdgeInsets.only(top: 30.0),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'Genral Health', 'Colf, Flu, Sore throat, cough, fever, headache ...'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'Depression', 'Always Feeling sad, feeling hopeless, lonely...'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'Nutrition', 'Genral food and health questions'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'Child care', 'Genral questions to pediatrician'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'Ayrveda', 'Traditional Indian medicinal practice'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _getCard(context, 'TCM', 'Traditional Chinese medicinal practice'),
+                  )
+                ],
+              ),
             )
           ],
         )

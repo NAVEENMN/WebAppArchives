@@ -44,6 +44,16 @@ class _SignUpState extends State<SignUp> {
       validator: (value) => value.isEmpty ? 'Please enter your password':null,
     );
 
+    void showSnackBar(BuildContext context) {
+      final scaffold = Scaffold.of(context);
+      final snackBarContent = SnackBar(
+        content: Text("sagar"),
+        action: SnackBarAction(
+            label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      );
+      scaffold.showSnackBar(snackBarContent);
+    }
+
     // Submit Button Section
     final signupButton = RaisedButton(
       color: Colors.lightGreen,
@@ -53,12 +63,9 @@ class _SignUpState extends State<SignUp> {
           //print(_user.toJson());
           //get_data();
           // if success result will be user else null
-          dynamic result = await _auth.signInAnon();
+          dynamic result = await _auth.registerWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
-            print("Failed to Sign In");
-          } else {
-            print(result.uid);
-            Navigator.pushNamed(context, '/Dashboard');
+            print("Failed to Sign Up");
           }
         }
       },
