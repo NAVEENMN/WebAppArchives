@@ -49,6 +49,30 @@ class database():
             print("invalid db or collection")     
         return json.dumps(resp)
 
+    def find_entry(self, db_name, coll_name, query, all_entry=False):
+        resp = dict()
+        resp['success'], resp['payload'] = False, None
+        if (db_name in self.dbs) and (coll_name in self.client[db_name].list_collection_names()):
+            ref = self.client[db_name][coll_name]
+            try:
+                if all_entry:
+                    for resp in ref.find({}, query):
+                        print(resp)
+                else:
+                    resp = ref.find_one(query)
+                    print(resp)
+                resp['success'] = True
+                resp['payload'] = dict({'_id': None})
+                print("found")
+            except:
+                resp['success'] = False
+                print("find failed")
+        else:
+            resp['success'] = False
+            resp['payload'] = json.dumps({'error':' Invalid collection'})
+            print("invalid db or collection")     
+        return json.dumps(resp)
+
     def get_collections(self, coll_name):
         print(self.collections)
         if coll_name in self.collections:
@@ -60,7 +84,7 @@ def main():
     #db.get_collections('Users')
     data = json.dumps({'name':'naveen'})
     #db.add_entry('Users', 'account', json.loads(data))
-    db.delete_entry('Users', 'account', query={'name': 'naveen'}, delete_many=True)
-
+    #db.delete_entry('Users', 'account', query={'name': 'naveen'}, delete_many=True)
+    db.find_entry('Users', 'account', query={'name': 'naveen'}, all_entry=True)
 if __name__ == "__main__":
     main()

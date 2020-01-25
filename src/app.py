@@ -10,6 +10,15 @@ from flask import request, render_template, url_for
 current_dir = os.path.dirname(os.path.abspath(__file__))
 app = flask.Flask(__name__)
 
+@app.route("/medteam/adduser", methods=["POST"])
+def user():
+    response = {"success": False}
+    if flask.request.method == "POST":
+        user_name = requests.args.get('name')
+        print(user_name)
+        response["success"] = True
+    return flask.jsonify(response)
+
 @app.route("/user", methods=["POST"])
 def user():
     response = {"success": False}
