@@ -12,6 +12,18 @@ app = flask.Flask(__name__)
 
 db = database()
 
+@app.route("/medteam/findusers", methods=["POST"])
+def med_find_users():
+    response = {"success": False}
+    if flask.request.method == "POST":
+        payload = dict()
+        query_key = request.form.get('query_key')
+        filter_list = request.form.get('filter_list')
+        #query = {'languages': {'$in': ['Tamil', 'English'] }}
+        query = {query_key: {'$in': filter_list }}
+        response = db.find_entry('Medteam', 'Accounts', query=query, all_entry=True)
+    return flask.jsonify(response)
+
 @app.route("/medteam/adduser", methods=["POST"])
 def med_add_user():
     response = {"success": False}
