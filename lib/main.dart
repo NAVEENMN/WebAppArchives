@@ -1,4 +1,5 @@
 import 'package:bio/models/user.dart';
+import 'package:bio/pages/assistance/providers.dart';
 import 'package:bio/pages/dashboard.dart';
 import 'package:bio/pages/wrapper.dart';
 import 'package:bio/services/auth.dart';
@@ -21,6 +22,7 @@ class RootApp extends StatelessWidget {
         home: Wrapper(),
         routes: {
           '/Dashboard' : (context) => Dashboard(),
+          '/Providers' : (context) => Providers()
         },
       ),
     );
