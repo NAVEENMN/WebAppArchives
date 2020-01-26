@@ -1,5 +1,8 @@
 import 'package:bio/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -89,6 +92,8 @@ Widget _buildCard(context, option, text) {
   );
 }
 
+
+
 class _HomeState extends State<Home> {
 
   final AuthService _auth = AuthService();
@@ -97,6 +102,25 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  Future<List<IllnessCard>> _getillness() async {
+    var data = await http.get("http://52.39.96.192/app/getproblems");
+    var jsonData = json.decode(data.body);
+    List<IllnessCard> illness_cards = [];
+    if (jsonData['success']) {
+      var _payload = jsonData['payload'];
+      var problems = _payload[0]['problems'];
+      for(int i =0; i<problems.length; i++) {
+        var key = 'p_' + i.toString();
+        var element = problems[i][key];
+        illness_cards.add(
+            IllnessCard(i, element['name'], element['description']));
+        print(element['name']);
+        print(element['description']);
+      }
+    }
+    return illness_cards;
   }
 
   @override
@@ -140,39 +164,38 @@ class _HomeState extends State<Home> {
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child: ListView(
-                padding: EdgeInsets.only(top: 30.0),
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'Genral Health', 'Colf, Flu, Sore throat, cough, fever, headache ...', 1),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'Depression', 'Always Feeling sad, feeling hopeless, lonely...', 2),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'Nutrition', 'Genral food and health questions', 3),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'Child care', 'Genral questions to pediatrician', 4),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'Ayrveda', 'Traditional Indian medicinal practice', 5),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _getCard(context, 'TCM', 'Traditional Chinese medicinal practice', 6),
-                  )
-                ],
+              child: FutureBuilder(
+                future: _getillness(),
+                builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if (snapshot.data == null) {
+                    return Container (
+                      child: Center(
+                        child: Text('Loading...'),
+                      ),
+                    );
+                  } else {
+                    print(snapshot.data.length);
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(snapshot.data[index].name),
+                        );
+                      },
+                    );
+                  }
+                },
               ),
             )
           ],
         )
-
     );
   }
+}
+
+class IllnessCard {
+  final int index;
+  final String name;
+  final String description;
+  IllnessCard(this.index, this.name, this.description);
 }
