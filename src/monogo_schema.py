@@ -31,12 +31,12 @@ def create_problems_list(client):
     ref = client['App']['problems']
     payload = dict()
     payload['problems'] = [
-        {'p_01': 'Depression'}, 
-        {'p_02': 'Stress'}, 
-        {'p_03': 'Anxiety'},
-        {'p_04': 'Cognitive Behavioural'},
-        {'p_05': 'Addictions'},
-        {'p_06': 'Trauma'}
+        {'p_01': {'name': 'Depression', 'description': 'feeling sad, hopeless, lonely'}}, 
+        {'p_02': {'name': 'Stress', 'description': 'feeling sad, hopeless, lonely'}}, 
+        {'p_03': {'name': 'Anxiety', 'description': 'feeling sad, hopeless, lonely'}},
+        {'p_04': {'name': 'Cognitive Behavioural', 'description': 'feeling sad, hopeless, lonely'}},
+        {'p_05': {'name': 'Addictions', 'description': 'feeling sad, hopeless, lonely'}},
+        {'p_06': {'name': 'Trauma', 'description': 'feeling sad, hopeless, lonely'}}
         ]
     ref.insert_one(payload)
 
