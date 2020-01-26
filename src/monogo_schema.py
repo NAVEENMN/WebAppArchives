@@ -27,6 +27,19 @@ def create_user_account(client):
     payload['Age'] = '29'
     ref.insert_one(payload)
 
+def create_problems_list(client):
+    ref = client['App']['problems']
+    payload = dict()
+    payload['problems'] = [
+        {'p_01': 'Depression'}, 
+        {'p_02': 'Stress'}, 
+        {'p_03': 'Anxiety'},
+        {'p_04': 'Cognitive Behavioural'},
+        {'p_05': 'Addictions'},
+        {'p_06': 'Trauma'}
+        ]
+    ref.insert_one(payload)
+
 def create_dummy_schema(client):
     create_user_account(client)
     create_med_team_account(client)

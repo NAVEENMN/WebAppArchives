@@ -1,5 +1,6 @@
 import json
 import pymongo
+from bson import json_util
 from monogo_schema import *
 
 class database():
@@ -8,6 +9,7 @@ class database():
         db_url = db_url + "test?retryWrites=true&w=majority"
         self.client = pymongo.MongoClient(db_url)
         #create_dummy_schema(self.client)
+        #create_problems_list(self.client)
         self.dbs = self.client.list_database_names()
 
     def add_entry(self, db_name, coll_name, data):
@@ -51,13 +53,36 @@ class database():
             print("invalid db or collection")     
         return json.dumps(resp)
 
-    def find_entry(self, db_name, coll_name, query, all_entry=False):
+    def get_entry(self, db_name, coll_name, query=None):
         resp = dict()
         resp['success'] = False
         if (db_name in self.dbs) and (coll_name in self.client[db_name].list_collection_names()):
             ref = self.client[db_name][coll_name]
             try:
-                resp['payload'] = [resp for resp in ref.find(query)] if all_entry else ref.find_one(query)
+                values = [ref.find_one(query)] if query else [ref.find_one()]
+                vals = [json.loads(json_util.dumps(val)) for val in values]
+                resp['payload'] = vals
+                resp['success'] = True
+            except:
+                resp['success'] = False
+                print("find failed")
+        else:
+            resp['success'] = False
+            resp['payload'] = {'error':' Invalid collection'}
+        return resp
+
+    def find_users(self, db_name, coll_name, query, all_entry=False):
+        resp = dict()
+        resp['success'] = False
+        if (db_name in self.dbs) and (coll_name in self.client[db_name].list_collection_names()):
+            ref = self.client[db_name][coll_name]
+            try:
+                values = [res for res in ref.find(query)] if all_entry else [ref.find_one(query)]
+                vals = [json.loads(json_util.dumps(val)) for val in values] #object id
+                payload = dict()
+                for val in vals:
+                    payload[val['user_id']] = val
+                resp['payload'] = payload
                 resp['success'] = True
                 print("found")
             except:
@@ -83,7 +108,9 @@ def main():
     #db.delete_entry('Users', 'account', query={'name': 'naveen'}, delete_many=True)
     #db.find_entry('Medteam', 'Accounts', query={'specialities': ['Ayurveda'] }, all_entry=True)
     #r = db.find_entry('Medteam', 'Accounts', query={'user_id':'91235'}, all_entry=False)
-    r = db.find_entry('Medteam', 'Accounts', query={'languages':{'$in': ['Tamil', 'English'] }}, all_entry=True)
+    #r = db.find_entry('Medteam', 'Accounts', query={'languages':{'$in': ['Tamil', 'English'] }}, all_entry=True)
+    #print(r)
+    r = db.get_entry('App', 'problems')
     print(r)
 if __name__ == "__main__":
     main()
