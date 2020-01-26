@@ -1,4 +1,5 @@
 import 'package:bio/services/auth.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -97,6 +98,7 @@ Widget _buildCard(context, option, text) {
 class _HomeState extends State<Home> {
 
   final AuthService _auth = AuthService();
+  int _current_index = 1;
 
   @override
   void initState() {
@@ -116,8 +118,6 @@ class _HomeState extends State<Home> {
         var element = problems[i][key];
         illness_cards.add(
             IllnessCard(i, element['name'], element['description']));
-        print(element['name']);
-        print(element['description']);
       }
     }
     return illness_cards;
@@ -126,10 +126,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Colors.blue,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Color(0xFF21BFBD),
+          backgroundColor: Colors.blue,
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back), onPressed: () {},
@@ -145,9 +145,29 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
+        bottomNavigationBar: CurvedNavigationBar(
+          color: Colors.white,
+          backgroundColor: Colors.blue,
+          buttonBackgroundColor: Colors.white,
+          height: 50,
+          index: _current_index,
+          items: [
+            Icon(Icons.description, color: Colors.black),
+            Icon(Icons.home, color: Colors.black),
+            Icon(Icons.people, color: Colors.black),
+          ],
+          animationDuration: Duration(milliseconds: 200),
+          animationCurve: Curves.bounceInOut,
+          onTap: (index) {
+            setState(() {
+              _current_index = index;
+            });
+          },
+        ),
         body: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
+
             Text(
               'I need help with..',
               style: TextStyle(
@@ -162,7 +182,7 @@ class _HomeState extends State<Home> {
               height: MediaQuery.of(context).size.height-200,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.blue,
               ),
               child: FutureBuilder(
                 future: _getillness(),
@@ -174,12 +194,22 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   } else {
-                    print(snapshot.data.length);
                     return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                          title: Text(snapshot.data[index].name),
+                          title: Text(
+                            snapshot.data[index].name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(snapshot.data[index].description),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          onTap: () {
+                            print("clicked $index");
+                          },
                         );
                       },
                     );
