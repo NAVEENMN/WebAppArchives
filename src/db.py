@@ -23,17 +23,31 @@ class database():
         db_url = "mongodb+srv://test_user:test@cluster0-onaoj.mongodb.net/"
         db_url = db_url + "test?retryWrites=true&w=majority"
         self.client = pymongo.MongoClient(db_url)
-        #create_dummy_schema(self.client)
-        #create_problems_list(self.client)
         self.dbs = self.client.list_database_names()
 
-    def add_entry(self, db_name, coll_name, data):
+    def check_if_doc_exist(self, ref, query):
+        log.info('Checking if this record exists')
+        status = True if ref.find(query).count() > 0 else False
+        if status:
+            log.info('Document found')
+        else:
+            log.info('Document not found')
+        return status
+
+    def add_entry(self, db_name, coll_name, data, query = None):
         log.info('Adding Entry: db { %s }, collection { %s }', db_name, coll_name)
         resp = dict()
         resp['success'], resp['payload'] = False, None
         if (db_name in self.dbs) and (coll_name in self.client[db_name].list_collection_names()):
             ref = self.client[db_name][coll_name]
             try:
+                exists = False
+                if query:
+                    exists = self.check_if_doc_exist(ref, query=query)
+                    if exists:
+                        log.info('Deleting this document/record')
+                        ref.delete_one(query)
+                log.info('Adding a record')
                 post_id = ref.insert_one(data).inserted_id
                 resp['success'] = True
                 resp['payload'] = {'_id': None}
@@ -124,14 +138,12 @@ class database():
 def main():
     db = database()
     #db.get_collections('Users')
-    data = json.dumps({'name':'naveen'})
-    db.add_entry('Users', 'account', json.loads(data))
     #db.delete_entry('Users', 'account', query={'name': 'naveen'}, delete_many=True)
     #db.find_entry('Medteam', 'Accounts', query={'specialities': ['Ayurveda'] }, all_entry=True)
     #r = db.find_entry('Medteam', 'Accounts', query={'user_id':'91235'}, all_entry=False)
     #r = db.find_entry('Medteam', 'Accounts', query={'languages':{'$in': ['Tamil', 'English'] }}, all_entry=True)
     #print(r)
-    r = db.get_entry('App', 'problems')
+    r = db.check_if_doc_exist('Accounts', 'Medteam', query={'name': 'Ke Xu'})
     print(r)
 if __name__ == "__main__":
     main()

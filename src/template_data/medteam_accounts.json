@@ -1,0 +1,44 @@
+{
+  "m_1": {
+    "id": "m_1",
+    "name": "Kenny Xu",
+    "location": "Milpitas",
+    "designation": "MD",
+    "languages": ["German", "Mandarian", "English"],
+    "Specialities": ["Pediatrician", "Family health", "Fitness"],
+    "description": "Dr. Kenny is exprienced in bla bla bla and has over bla year of",
+    "profile_pic": null,
+    "contact" : {
+      "email": "kenny@gmail.com",
+      "phone": null
+    }
+  },
+  "m_2": {
+    "id": "m_2",
+    "name": "Darrel P",
+    "location": "San Franscisco",
+    "designation": "MD",
+    "languages": ["German", "Hindi", "English"],
+    "Specialities": ["Mind health", "Cognitive developement", "Nutrition"],
+    "description": "Dr. Darrel is exprienced in bla bla bla and has over bla year of",
+    "profile_pic": null,
+    "contact" : {
+      "email": "darrel@gmail.com",
+      "phone": null
+    }
+  },
+  "m_3": {
+    "id": "m_3",
+    "name": "Vijay M",
+    "location": "Palo Alto",
+    "designation": "MD",
+    "languages": ["Kannada", "Hindi", "English"],
+    "Specialities": ["Stress Management", "Diet", "Physical health"],
+    "description": "Dr. Vijay is exprienced in bla bla bla and has over bla year of",
+    "profile_pic": null,
+    "contact" : {
+      "email": "vijay@gmail.com",
+      "phone": null
+    }
+  }
+}
