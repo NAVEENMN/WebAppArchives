@@ -3,27 +3,27 @@
   "name": ["Depression", "Stress", "Anxiety", "Cognitive Behavioural", "Addictions", "Trauma"],
   "details": {
     "pid_1": {
-      "short_description": "short descp for depression",
+      "short_description": "Always feeling sad, lonely, demotivated, low energy",
       "long_description": "long desp for depression"
     },
     "pid_2": {
-      "short_description": "short desp for stress",
+      "short_description": "Social Anxiety, Always feeling low energy, anxious, worrying, sleepless",
       "long_description": "long desp for stress"
     },
     "pid_3": {
-      "short_description": "short desp for anxiety",
+      "short_description": "Always feeling scared, anxious, worried, troubled, bothered",
       "long_description": "long desp for anxiety"
     },
     "pid_4": {
-      "short_description": "short desp for cbt",
+      "short_description": "Wanting to improve mood, behaviour, habits, energy, positivity",
       "long_description": "long desp for cbt"
     },
     "pid_5": {
-      "short_description": "short desp for addiction",
+      "short_description": "Addition to gaming, porn, cigretts, alchohol, social media",
       "long_description": "long desp for addiction"
     },
     "pid_6": {
-      "short_description": "short desp for trauma",
+      "short_description": "Childhood trauma, Relationship trauma, anxious, fear",
       "long_description": "long desp for trauma"
     }
   }
