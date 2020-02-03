@@ -29,7 +29,7 @@ def med_find_users():
         collection = request.args.get('collection')
         if collection == "Medteam":
             if 'filter_by' in request.args:
-                filters = ['languages', 'Specialities', 'id']
+                filters = ['languages', 'Specialities', 'Areas', 'id']
                 filter_by = request.args.get('filter_by', type=str)
                 if filter_by not in filters:
                     return response
