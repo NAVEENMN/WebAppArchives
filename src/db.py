@@ -85,15 +85,20 @@ class database():
             log.error('Delete entry failed: Invalid collection')
         return json.dumps(resp)
 
-    def get_entry(self, db_name, coll_name, query=None):
+    def get_entry(self, db_name, coll_name, query=None, filter=False):
         log.info('Find Entry: db { %s }, collection { %s }', db_name, coll_name)
-        log.info('Query %s', query)
+        log.info('Filter: %s, Query: %s', filter, query)
         resp = dict()
         resp['success'] = False
         if (db_name in self.dbs) and (coll_name in self.client[db_name].list_collection_names()):
             ref = self.client[db_name][coll_name]
             try:
-                values = [ref.find_one(query)] if query else [ref.find_one()]
+                if filter:
+                    # get all results matching the query
+                    values = [ref.find(query)]
+                else:
+                    # if no query get all the results else find that one record
+                    values = [ref.find_one(query)] if query else [ref.find()]
                 vals = [json.loads(json_util.dumps(val)) for val in values]
                 resp['payload'] = vals
                 resp['success'] = True

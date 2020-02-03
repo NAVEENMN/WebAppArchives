@@ -12,26 +12,63 @@ app = flask.Flask(__name__)
 
 db = database()
 
-@app.route("/app/getproblems", methods=["GET"])
+
+@app.route("/app/problems", methods=["GET"])
 def app_get_problems():
     response = {"success": False}
     if flask.request.method == "GET":
-        payload = dict()
-        response = db.get_entry('App', 'problems')
+        response = db.get_entry('App', 'Problems')
     return flask.jsonify(response)
 
-@app.route("/medteam/findusers", methods=["POST"])
+
+@app.route("/accounts", methods=["POST", "GET"])
 def med_find_users():
     response = {"success": False}
+
+    if flask.request.method == "GET":
+        collection = request.args.get('collection')
+        if collection == "Medteam":
+            if 'filter_by' in request.args:
+                filters = ['languages', 'Specialities', 'id']
+                filter_by = request.args.get('filter_by', type=str)
+                if filter_by not in filters:
+                    return response
+                if filter_by == 'id':
+                    query = {'id': request.args.get('id')}
+                    filter = False
+                else:
+                    filter_list = request.args.get('filter_list', type=str)
+                    filter_list = filter_list.split(',')
+                    filter_list = [element.replace(' ', '') for element in filter_list]
+                    #query = {'languages': {'$in': ['Tamil', 'English'] }}
+                    query = {filter_by: {'$in': filter_list}}
+                    filter = True
+            else:
+                # get all results
+                filter=False
+                query= None
+
+            response = db.get_entry('Accounts', collection, query=query, filter=filter)
+
+        elif collection == "Patients":
+            query = {'id': request.args.get('id')}
+            filter = False
+            response = db.get_entry('Accounts', collection, query=query, filter=filter)
+
     if flask.request.method == "POST":
-        payload = dict()
-        query_key = request.form.get('query_key', type=str)
-        filter_list = request.form.get('filter_list', type=str)
-        filter_list = filter_list.split(',')
-        filter_list = [element.replace(' ', '') for element in filter_list]
-        #query = {'languages': {'$in': ['Tamil', 'English'] }}
-        query = {query_key: {'$in': filter_list }}
-        response = db.find_users('Medteam', 'Accounts', query=query, all_entry=True)
+        collection = request.form.get('collection', type=str)
+        if collection == "Medteam":
+            operation = request.form.get('operation', type=str)
+            operations = ['add_user', 'update_user']
+            if operation not in operations:
+                return response
+
+        elif collection == "Patients":
+            operation = request.form.get('operation', type=str)
+            operations = ['add_user', 'update_user']
+            if operation not in operations:
+                return response
+
     return flask.jsonify(response)
 
 @app.route("/medteam/adduser", methods=["POST"])
