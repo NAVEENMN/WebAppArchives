@@ -1,3 +1,4 @@
+import 'package:bio/models/Problems.dart';
 import 'package:bio/services/auth.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -106,18 +107,20 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future<List<IllnessCard>> _getillness() async {
-    var data = await http.get("http://52.39.96.192/app/getproblems");
+  Future<List<Problems>> _getillness() async {
+    var data = await http.get("http://52.39.96.192/app/problems");
     var jsonData = json.decode(data.body);
-    List<IllnessCard> illness_cards = [];
+    List<Problems> illness_cards = [];
     if (jsonData['success']) {
       var _payload = jsonData['payload'];
-      var problems = _payload[0]['problems'];
-      for(int i =0; i<problems.length; i++) {
-        var key = 'p_' + i.toString();
-        var element = problems[i][key];
+      var ids = _payload[0][0]['ids'];
+      print(ids.length);
+      for(int i =0; i<ids.length; i++) {
+        var key = ids[i];
+        var names = _payload[0][0]['name'];
+        var description = _payload[0][0]['details'][key];
         illness_cards.add(
-            IllnessCard(i, element['name'], element['description']));
+            Problems(i, names[i], description['short_description'], description['long_description']));
       }
     }
     return illness_cards;
@@ -209,6 +212,7 @@ class _HomeState extends State<Home> {
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             print("clicked $index");
+                            print(snapshot.data[index].long_description);
                           },
                         );
                       },
@@ -221,11 +225,4 @@ class _HomeState extends State<Home> {
         )
     );
   }
-}
-
-class IllnessCard {
-  final int index;
-  final String name;
-  final String description;
-  IllnessCard(this.index, this.name, this.description);
 }
