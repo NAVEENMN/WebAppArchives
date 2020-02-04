@@ -1,3 +1,4 @@
+import 'package:bio/pages/description/information.dart';
 import 'package:bio/services/auth.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -209,6 +210,8 @@ class _HomeState extends State<Home> {
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             print("clicked $index");
+                            Navigator.push(context,
+                            new MaterialPageRoute(builder: (context) => Information(snapshot.data[index].name)));
                           },
                         );
                       },
