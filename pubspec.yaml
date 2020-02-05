@@ -52,6 +52,7 @@ flutter:
     - assets/images/background/background.png
     - assets/images/options/option_1.png
     - assets/images/logo/logo.png
+    - assets/images/problems/depression/depression.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,4 +1,5 @@
 import 'package:bio/pages/description/information.dart';
+import 'package:bio/models/Problems.dart';
 import 'package:bio/services/auth.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -107,18 +108,20 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future<List<IllnessCard>> _getillness() async {
-    var data = await http.get("http://52.39.96.192/app/getproblems");
+  Future<List<Problems>> _getillness() async {
+    var data = await http.get("http://52.39.96.192/app/problems");
     var jsonData = json.decode(data.body);
-    List<IllnessCard> illness_cards = [];
+    List<Problems> illness_cards = [];
     if (jsonData['success']) {
       var _payload = jsonData['payload'];
-      var problems = _payload[0]['problems'];
-      for(int i =0; i<problems.length; i++) {
-        var key = 'p_' + i.toString();
-        var element = problems[i][key];
+      var ids = _payload[0][0]['ids'];
+      print(ids.length);
+      for(int i =0; i<ids.length; i++) {
+        var key = ids[i];
+        var names = _payload[0][0]['name'];
+        var description = _payload[0][0]['details'][key];
         illness_cards.add(
-            IllnessCard(i, element['name'], element['description']));
+            Problems(i, names[i], description['short_description'], description['long_description']));
       }
     }
     return illness_cards;
@@ -127,10 +130,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Color(0xfffff8e8),
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xffe85358),
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back), onPressed: () {},
@@ -148,14 +151,14 @@ class _HomeState extends State<Home> {
         ),
         bottomNavigationBar: CurvedNavigationBar(
           color: Colors.white,
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xfffff8e8),
           buttonBackgroundColor: Colors.white,
           height: 50,
           index: _current_index,
           items: [
-            Icon(Icons.description, color: Colors.black),
-            Icon(Icons.home, color: Colors.black),
-            Icon(Icons.people, color: Colors.black),
+            Icon(Icons.description, color: Color(0xffe85358)),
+            Icon(Icons.home, color: Color(0xffe85358)),
+            Icon(Icons.people, color: Color(0xffe85358)),
           ],
           animationDuration: Duration(milliseconds: 200),
           animationCurve: Curves.bounceInOut,
@@ -168,12 +171,12 @@ class _HomeState extends State<Home> {
         body: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
-
+            SizedBox(height: 10,),
             Text(
               'I need help with..',
               style: TextStyle(
                   fontFamily: 'Montserrat',
-                  color: Colors.white,
+                  color: Color(0xffe85358),
                   fontSize: 30,
                   fontWeight: FontWeight.bold
               ),
@@ -183,7 +186,7 @@ class _HomeState extends State<Home> {
               height: MediaQuery.of(context).size.height-200,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color(0xfffff8e8),
               ),
               child: FutureBuilder(
                 future: _getillness(),
@@ -202,7 +205,7 @@ class _HomeState extends State<Home> {
                           title: Text(
                             snapshot.data[index].name,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -211,7 +214,9 @@ class _HomeState extends State<Home> {
                           onTap: () {
                             print("clicked $index");
                             Navigator.push(context,
-                            new MaterialPageRoute(builder: (context) => Information(snapshot.data[index].name)));
+                            new MaterialPageRoute(builder: (context) =>
+                                Information(snapshot.data[index].name,
+                                    snapshot.data[index].long_description)));
                           },
                         );
                       },
@@ -224,11 +229,4 @@ class _HomeState extends State<Home> {
         )
     );
   }
-}
-
-class IllnessCard {
-  final int index;
-  final String name;
-  final String description;
-  IllnessCard(this.index, this.name, this.description);
 }
