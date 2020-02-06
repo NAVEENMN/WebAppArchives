@@ -12,12 +12,36 @@ app = flask.Flask(__name__)
 
 db = database()
 
+def load_template_data(path):
+    data = {}
+    with open(path) as json_file:
+        data = json.load(json_file)
+    return data
+
 
 @app.route("/app/problems", methods=["GET"])
 def app_get_problems():
     response = {"success": False}
     if flask.request.method == "GET":
         response = db.get_entry('App', 'Problems')
+    return flask.jsonify(response)
+
+
+@app.route("/app/find_practitioner", methods=["GET"])
+def app_get_problems():
+    response = {"success": False}
+    if flask.request.method == "GET":
+        patient_id = request.args.get('patient_id')
+        # for now given a problem retrieve all available practitioner
+        problem_id = request.args.get('problem_id')
+        # map problem_id to problem label
+        data = load_template_data('template_data/problems.json')
+        ids = data['ids']
+        indx = ids.index(problem_id)
+        problem_name = data['name'][indx]
+        collection = 'Medteam'
+        query = {'Areas': {'$in': [problem_name]}}
+        response = db.get_entry('Accounts', collection, query=query, filter=filter)
     return flask.jsonify(response)
 
 

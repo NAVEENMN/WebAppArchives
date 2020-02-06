@@ -140,6 +140,20 @@ class database():
             print(True)
         print(self.client[coll_name])
 
+
+def test(db):
+    data = load_template_data('template_data/problems.json')
+    ids = data['ids']
+    problem_id = 'pid_2'
+    indx = ids.index(problem_id)
+    problem_name = data['name'][indx]
+    print(problem_id, problem_name)
+    collection = 'Medteam'
+    query = {'Areas': {'$in': [problem_name]}}
+    response = db.get_entry('Accounts', collection, query=query, filter=filter)
+    return response
+
+
 def main():
     db = database()
     #db.get_collections('Users')
@@ -148,7 +162,9 @@ def main():
     #r = db.find_entry('Medteam', 'Accounts', query={'user_id':'91235'}, all_entry=False)
     #r = db.find_entry('Medteam', 'Accounts', query={'languages':{'$in': ['Tamil', 'English'] }}, all_entry=True)
     #print(r)
-    r = db.check_if_doc_exist('Accounts', 'Medteam', query={'name': 'Ke Xu'})
-    print(r)
+    #r = db.check_if_doc_exist('Accounts', 'Medteam', query={'name': 'Ke Xu'})
+    #print(r)
+    print(test(db))
+
 if __name__ == "__main__":
     main()
