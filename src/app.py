@@ -28,7 +28,7 @@ def app_get_problems():
 
 
 @app.route("/app/find_practitioner", methods=["GET"])
-def app_get_problems():
+def app_get_practitioner():
     response = {"success": False}
     if flask.request.method == "GET":
         patient_id = request.args.get('patient_id')
