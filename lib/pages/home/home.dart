@@ -26,17 +26,48 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (this.uid == "RbbXreHWQ4gmsEQzEVOeez2KyIE2") {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Admin Dashboard"),
-        ),
-      );
+      return adminView();
     } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Dashboard"),
-        ),
-      );
+      return userView();
     }
   }
 }
+
+Widget adminView() {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Admin Dashboard'),
+    ),
+    drawer: Drawer(
+      child: ListView(
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+            accountName: Text('Admin'),
+            accountEmail: Text('admin@abc.com'),
+            decoration: BoxDecoration(
+              image:DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/images/background/background.png")
+              )
+            ),
+          ),
+          ListTile(
+            title: Text("Config"),
+            trailing: Icon(Icons.settings),
+          ),
+        ],
+      ),
+    ),
+    body: Center(child: Text('Admin'),),
+  );
+}
+
+
+Widget userView() {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('User Dashboard'),
+    ),
+  );
+}
+
