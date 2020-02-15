@@ -2,10 +2,6 @@ import 'package:app/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
-
-  final Function toggleView;
-  SignIn({this.toggleView});
-
   @override
   _SignInState createState() => _SignInState();
 }
@@ -64,20 +60,6 @@ class _SignInState extends State<SignIn> {
       ),
     );
 
-    // Submit Button Section
-    final toggleButton = FlatButton(
-      color: Colors.white,
-      onPressed: () {
-        widget.toggleView();
-      },
-      child: Text(
-        "Sign Up",
-        style: TextStyle(
-          color: Colors.green,
-        ),
-      ),
-    );
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -104,19 +86,7 @@ class _SignInState extends State<SignIn> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: signinButton,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('want a new account?'),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: toggleButton,
-                    )
-                  ],
-                ),
-                SizedBox(height: 30.0, width: 18.0),
+                )
               ],
             ),
           ),

@@ -1,7 +1,5 @@
-import 'package:app/models/user.dart';
-import 'package:app/services/auth.dart';
+import 'package:app/pages/home/adminView.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   final String user_uid;
@@ -9,59 +7,36 @@ class Home extends StatefulWidget {
   Home(this.user_uid);
 
   @override
-  _HomeState createState() => _HomeState(user_uid);
+  _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   
-  String uid;
-  _HomeState(this.uid);
+  TabController control;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    control = new TabController(vsync: this, length: 3);
+  }
+
+  @override
+  void dispose() {
+    control.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (this.uid == "RbbXreHWQ4gmsEQzEVOeez2KyIE2") {
-      return adminView();
+    if (widget.user_uid == "RbbXreHWQ4gmsEQzEVOeez2KyIE2") {
+      return adminView(widget.user_uid, control);
     } else {
       return userView();
     }
   }
 }
-
-Widget adminView() {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Admin Dashboard'),
-    ),
-    drawer: Drawer(
-      child: ListView(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text('Admin'),
-            accountEmail: Text('admin@abc.com'),
-            decoration: BoxDecoration(
-              image:DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage("assets/images/background/background.png")
-              )
-            ),
-          ),
-          ListTile(
-            title: Text("Config"),
-            trailing: Icon(Icons.settings),
-          ),
-        ],
-      ),
-    ),
-    body: Center(child: Text('Admin'),),
-  );
-}
-
 
 Widget userView() {
   return Scaffold(
