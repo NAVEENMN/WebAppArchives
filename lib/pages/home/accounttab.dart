@@ -11,11 +11,13 @@ class _accounttabState extends State<accounttab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GridView.count(
-        crossAxisCount: 2,
+        crossAxisCount: 4,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: accountCreate(),
+          Card(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: accountCreate(),
+            ),
           ),
           Center(
             child: Text('2'),
