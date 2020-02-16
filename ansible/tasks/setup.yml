@@ -14,8 +14,8 @@
   shell: pip install dnspython
 - name: Install pymongo client
   shell: pip install pymongo
-- name: Install simple salesforce
-  shell: pip install simple-salesforce
+- name: Install Flask Cors
+  shell: pip install flask-cors
 
 
 
