@@ -1,5 +1,5 @@
-import 'package:app/pages/home/accounttab.dart';
-import 'package:app/pages/home/metricstab.dart';
+import 'package:app/pages/home/tabs/accounttab.dart';
+import 'package:app/pages/home/tabs/metricstab.dart';
 import 'package:flutter/material.dart';
 
 class adminView extends StatefulWidget {
@@ -83,11 +83,12 @@ class _adminViewState extends State<adminView> {
         Flexible(
           flex: 2, 
           child: Container(
+            padding: EdgeInsets.all(10),
             child: TabBarView(
             controller: widget.control,
             children: <Widget>[
               metricsTab(update_log),
-              accounttab(),
+              accounttab(update_log),
               Center(
                 child: Text('To be implemented'),
                 )
