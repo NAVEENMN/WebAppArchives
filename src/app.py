@@ -6,9 +6,11 @@ import pymongo
 import requests
 from db import *
 from flask import request, render_template, url_for
+from flask_cors import CORS
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 app = flask.Flask(__name__)
+CORS(app)
 
 db = database()
 
