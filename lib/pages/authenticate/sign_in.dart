@@ -1,7 +1,10 @@
+import 'package:app/models/user.dart';
 import 'package:app/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
+  User user;
+  SignIn(this.user);
   @override
   _SignInState createState() => _SignInState();
 }
@@ -49,6 +52,9 @@ class _SignInState extends State<SignIn> {
           dynamic result = await _auth.signInWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
             print("Failed to Sign In");
+          } else {
+            print("Sign in success");
+            widget.user.email = email_controller.text;
           }
         }
       },

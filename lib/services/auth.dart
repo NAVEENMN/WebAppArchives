@@ -8,7 +8,7 @@ class AuthService {
 
   // Model user object
   User _userFromFirebase(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(uid: user.uid, email: user.email) : null;
   }
 
   // On change user auth stream

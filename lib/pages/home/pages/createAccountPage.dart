@@ -1,13 +1,13 @@
-import 'package:app/services/auth.dart';
+import 'package:app/models/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class createAccountPage extends StatelessWidget {
 
   final FirebaseAuth _adminAuth;
-  final Function update_log;
+  adminlogging lg;
 
-  createAccountPage(this._adminAuth, this.update_log);  
+  createAccountPage(this._adminAuth, this.lg);  
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class createAccountPage extends StatelessWidget {
         return user;
       } catch (e) {
         print(e.toString());
-        update_log(e.toString());
+        lg.log("Error", e.toString());
         return null;
       }
   }
@@ -50,14 +50,14 @@ class createAccountPage extends StatelessWidget {
       color: Colors.lightGreen,
       onPressed: () async {        
         if (_formKey.currentState.validate()) {
-          update_log("Registering account");
+          lg.log("Info", "Registering account");
           dynamic result = await adminRegisterAccountWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
-            update_log('Account Registration failed');
+            lg.log("Info", 'Account Registration failed');
             print("Failed to Sign Up");
           }
         } else {
-          update_log("Form invalid");
+          lg.log("Info", "Form invalid");
         }
       },
       child: Text(

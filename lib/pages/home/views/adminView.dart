@@ -1,3 +1,5 @@
+import 'package:app/models/fontstyling.dart';
+import 'package:app/models/logging.dart';
 import 'package:app/pages/home/tabs/accounttab.dart';
 import 'package:app/pages/home/tabs/metricstab.dart';
 import 'package:flutter/material.dart';
@@ -15,44 +17,52 @@ class adminView extends StatefulWidget {
 
 class _adminViewState extends State<adminView> {
 
-  List<String> log_list = new List<String>();
-  
-  void update_log(String log_element) {
-    setState(() {
-        log_list.add(log_element);
-      });
-  }
-
-  Text log_format(String txt) {
-    var now = new DateTime.now();
-    return Text(
-      "${now} - ${txt}",
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        color: Colors.white
-      ),
-    );
-  }
+  adminlogging lg = adminlogging();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(
-      title: Text('Admin Dashboard'),
+      title: Text(
+        'Admin Dashboard',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Montserrat'
+        ),
+      ),
+      centerTitle: true,
       bottom: TabBar(
         controller: widget.control,
         tabs: <Widget>[
           Tab(
-            child: Text('Metrics'),
-            icon: Icon(Icons.assessment),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.assessment),
+                SizedBox(width: 2,),
+                fontText('Metrics', 'Montserrat', false, Colors.white),
+              ],
+            ),
           ),
           Tab(
-            child: Text('Accounts'),
-            icon: Icon(Icons.people),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.people),
+                SizedBox(width: 2,),
+                fontText('Accounts', 'Montserrat', false, Colors.white),
+              ],
+            ),
           ),
           Tab(
-            child: Text('Research'),
-            icon: Icon(Icons.directions_car),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.assignment),
+                SizedBox(width: 2,),
+                fontText('Research', 'Montserrat', false, Colors.white),
+              ],
+            ),
           ),
         ],
       ),
@@ -87,8 +97,8 @@ class _adminViewState extends State<adminView> {
             child: TabBarView(
             controller: widget.control,
             children: <Widget>[
-              metricsTab(update_log),
-              accounttab(update_log),
+              metricsTab(lg),
+              accounttab(lg),
               Center(
                 child: Text('To be implemented'),
                 )
@@ -98,17 +108,22 @@ class _adminViewState extends State<adminView> {
           ),
           Flexible(
             flex: 1,
-            child: Container(
+            child: ValueListenableBuilder(
+              valueListenable: lg.counter,
+              builder: (BuildContext context, int value, Widget child) {
+                return Container(
               padding: EdgeInsets.all(10),
               constraints: BoxConstraints.expand(),
               color: Colors.black,
               child: ListView.builder(
-                itemCount: log_list.length,
+                itemCount: lg.logList.length,
                 itemBuilder: (context, index) {
-                  return log_format(log_list[index]);
+                  return lg.logLines[index];
                 },
               ),
-              )
+              );
+              },
+            ),
           )
       ],
     )

@@ -1,22 +1,14 @@
+import 'package:app/models/fontstyling.dart';
+import 'package:app/models/logging.dart';
 import 'package:flutter/material.dart';
 
 class metricsTab extends StatefulWidget {
 
-  final Function update_log;
-  metricsTab(this.update_log);
+  adminlogging lg;
+  metricsTab(this.lg);
 
   @override
   _metricsTabState createState() => _metricsTabState();
-}
-
-Widget text_heading(String txt) {
-  return Text(
-    txt,
-    style: TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold
-    ),
-  );
 }
 
 Widget accountSummary(widget) {
@@ -24,9 +16,9 @@ Widget accountSummary(widget) {
     children: <Widget>[
       Row(
         children: <Widget>[
-          text_heading('Account Metrics'),
+          fontText('Account Metrics', 'Montserrat', true, Colors.black),
           IconButton(icon: Icon(Icons.refresh), onPressed: () {
-            widget.update_log('Running Account Summary');
+            widget.lg.log('Info','Running Account Summary');
           }
           ),
         ],
@@ -48,9 +40,9 @@ Widget researchSummary(widget) {
     children: <Widget>[
       Row(
         children: <Widget>[
-          text_heading('Research Metrics'),
-          IconButton(icon: Icon(Icons.refresh), onPressed: () { 
-            widget.update_log('Running Research Summary');
+          fontText('Research Metrics', 'Montserrat', true, Colors.black),
+          IconButton(icon: Icon(Icons.refresh), onPressed: () {
+            widget.lg.log('Info','Running Research Summary');
           }
           ),
         ],
@@ -68,6 +60,7 @@ Widget researchSummary(widget) {
 }
 
 class _metricsTabState extends State<metricsTab> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
