@@ -16,6 +16,20 @@ def set_logging():
 log = set_logging()
 
 
+def data_clean_up(data):
+    def lower_key(in_dict):
+        if type(in_dict) is dict:
+            out_dict = {}
+            for key, item in in_dict.items():
+                out_dict[key.lower()] = lower_key(item)
+            return out_dict
+        elif type(in_dict) is list:
+            return [lower_key(obj) for obj in in_dict]
+        else:
+            return in_dict
+    cleaned = lower_key(data)
+    return cleaned
+
 def load_template_data(path):
     data = {}
     with open(path) as json_file:
