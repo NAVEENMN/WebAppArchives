@@ -50,6 +50,8 @@ class _userViewState extends State<userView> {
   @override
   Widget build(BuildContext context) {
 
+    Pallet pallet = Pallet();
+
     String name = "";
     String email = "";
     String _location = "";
@@ -68,8 +70,10 @@ class _userViewState extends State<userView> {
       appBar: AppBar(
         title: fontText('Dashboard', 'Montserrat', true, Colors.white, 1.5),
         centerTitle: true,
+        backgroundColor: pallet.shadePolite0,
         bottom: TabBar(
           controller: widget.control,
+          indicatorColor: pallet.shadePolite3,
           tabs: <Widget>[
             Tab(
               child: Row(
@@ -140,6 +144,7 @@ class _userViewState extends State<userView> {
           Flexible(
             flex: 2, 
             child: Container(
+              color: pallet.shadeDark,
               padding: EdgeInsets.all(10),
               child: TabBarView(
               controller: widget.control,

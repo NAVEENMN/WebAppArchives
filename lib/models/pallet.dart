@@ -11,4 +11,5 @@ class Pallet {
   Color shadeOrange = Color(0xfff26716);
   Color shadeWhite = Colors.white;
   Color shadeBlue = Color(0xff4a96d9);
+  Color shadeDark = Color(0xff262626);
 }
