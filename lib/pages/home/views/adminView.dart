@@ -40,7 +40,7 @@ class _adminViewState extends State<adminView> {
               children: <Widget>[
                 Icon(Icons.assessment),
                 SizedBox(width: 2,),
-                fontText('Metrics', 'Montserrat', false, Colors.white),
+                fontText('Metrics', 'Montserrat', false, Colors.white, 1.5),
               ],
             ),
           ),
@@ -50,7 +50,7 @@ class _adminViewState extends State<adminView> {
               children: <Widget>[
                 Icon(Icons.people),
                 SizedBox(width: 2,),
-                fontText('Accounts', 'Montserrat', false, Colors.white),
+                fontText('Accounts', 'Montserrat', false, Colors.white, 1.5),
               ],
             ),
           ),
@@ -60,7 +60,7 @@ class _adminViewState extends State<adminView> {
               children: <Widget>[
                 Icon(Icons.assignment),
                 SizedBox(width: 2,),
-                fontText('Research', 'Montserrat', false, Colors.white),
+                fontText('Research', 'Montserrat', false, Colors.white, 1.5),
               ],
             ),
           ),

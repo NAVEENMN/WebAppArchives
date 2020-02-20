@@ -1,4 +1,5 @@
 import 'package:app/models/fontstyling.dart';
+import 'package:app/models/pallet.dart';
 import 'package:app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -49,14 +50,23 @@ class _userViewState extends State<userView> {
   @override
   Widget build(BuildContext context) {
 
-    String name = "${widget.usr.name_.title}. ${widget.usr.name_.firstName} ${widget.usr.name_.lastName}";
-    String email = widget.usr.profession_.designation;
-    String _location = "${widget.usr.location_.cityName}, ${widget.usr.location_.stateName}";
+    String name = "";
+    String email = "";
+    String _location = "";
+    String professionalDescription = "";
     String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${widget.usr.uid}.jpg";
+
+    if (widget.usr.isUpdate) {
+      name = "${widget.usr.name_.title}. ${widget.usr.name_.firstName} ${widget.usr.name_.lastName}";
+      email = widget.usr.profession_.designation;
+      _location = "${widget.usr.location_.cityName}, ${widget.usr.location_.stateName}";
+      professionalDescription = widget.usr.profession_.description;
+      profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${widget.usr.uid}.jpg";
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: fontText('Dashboard', 'Montserrat', true, Colors.white),
+        title: fontText('Dashboard', 'Montserrat', true, Colors.white, 1.5),
         centerTitle: true,
         bottom: TabBar(
           controller: widget.control,
@@ -67,7 +77,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.assessment),
                   SizedBox(width: 2,),
-                  fontText('Patients', 'Montserrat', false, Colors.white),
+                  fontText('Patients', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -77,7 +87,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.people),
                   SizedBox(width: 2,),
-                  fontText('Accounts', 'Montserrat', false, Colors.white),
+                  fontText('Accounts', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -87,7 +97,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.assignment),
                   SizedBox(width: 2,),
-                  fontText('Research', 'Montserrat', false, Colors.white),
+                  fontText('Research', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -102,8 +112,8 @@ class _userViewState extends State<userView> {
                 backgroundColor: Colors.yellow,
                 backgroundImage: NetworkImage(profileImageUrl),
               ),
-              accountName: fontText(name, 'Esteban', false, Colors.black),
-              accountEmail: fontText(email, 'Esteban', false, Colors.black),
+              accountName: fontText(name, 'Esteban', false, Colors.black, 1.5),
+              accountEmail: fontText(email, 'Esteban', false, Colors.black, 1.5),
               decoration: BoxDecoration(
                 image:DecorationImage(
                   fit: BoxFit.fill,
@@ -113,12 +123,12 @@ class _userViewState extends State<userView> {
             ),
             ListTile(
               title: Text("Location"),
-              subtitle: fontText(_location, 'Esteban', false, Colors.black),
+              subtitle: fontText(_location, 'Esteban', false, Colors.black, 1.5),
               trailing: Icon(Icons.location_on),
             ),
             ListTile(
               title: Text("Description"),
-              subtitle: fontText(widget.usr.profession_.description, 'Esteban', false, Colors.black),
+              subtitle: fontText(professionalDescription, 'Esteban', false, Colors.black, 1.5),
               trailing: Icon(Icons.assignment),
             ),
           ],
@@ -149,7 +159,6 @@ class _userViewState extends State<userView> {
   }
 }
 
-
 class getUserDetailsScreen extends StatefulWidget {
   
   final User usr;
@@ -163,8 +172,35 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  Widget createTextField(TextEditingController controller, String label, String hint, String errorMsg, int length) {
+    Pallet pallet = new Pallet();
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      color: pallet.shadePolite3,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          fontText(label, 'Esteban', true, pallet.shadePolite0, 1.8),
+          TextFormField(
+            style: TextStyle(
+              color: pallet.shadeBlue,
+              fontWeight: FontWeight.normal
+            ),
+            maxLength: length,
+            controller: controller,
+            decoration: const InputDecoration(hintText: ''),
+            validator: (value) => value.isEmpty ? errorMsg : null,
+          )
+        ],
+      ),
+    );
+  }
+
 @override
   Widget build(BuildContext context) {
+
+    Pallet pallet = Pallet();
 
     // Filter section
     List<String> _gender = ['Male', 'Female', 'Non Binary'];
@@ -185,22 +221,25 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
       }).toList(),
     );
 
-    // First Name field
-    final firstNameController = TextEditingController();
-    final firstNameField = TextFormField(
-      controller: firstNameController,
-      decoration: const InputDecoration(hintText: 'First Name'),
-      validator: (value) => value.isEmpty ? 'Please enter your First Name': null,
+    // Filter section
+    List<String> _title = ['Mr', 'Mrs', 'Dr'];
+    String _selectedtitle;
+    final titleField = DropdownButton(
+      hint: Text('Title'),
+      value: _selectedgender,
+      onChanged: (newValue) {
+        setState(() {
+          _selectedgender = newValue;
+        });
+      },
+      items: _title.map((element){
+        return DropdownMenuItem(
+          child: Text(element),
+          value: element,
+        );
+      }).toList(),
     );
-
-    // Last Name field
-    final lastNameController = TextEditingController();
-    final lastNameField = TextFormField(
-      controller: lastNameController,
-      decoration: const InputDecoration(hintText: 'Last Name'),
-      validator: (value) => value.isEmpty ? 'Please enter your Last Name': null,
-    );
-
+    
     // Designation field
     final designationController = TextEditingController();
     final designationField = TextFormField(
@@ -224,6 +263,13 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
       ),
     );
 
+    final NameController = TextEditingController();
+    final LocationController = TextEditingController();
+    final DesignationController = TextEditingController();
+    final UniversityController = TextEditingController();
+    final SpecializationController = TextEditingController();
+    final DescriptionController = TextEditingController();
+    
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.85),
       body: Center(
@@ -231,36 +277,18 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("Please provide these details."),
+            fontText('Please provide more details', 'Montserrat', true, pallet.shadePolite0, 2),
             Container(
-              padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
+              padding: EdgeInsets.fromLTRB(50, 50, 50, 10),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        genderField,
-                        Expanded( // wrap your Column in Expanded
-                          child: Column(
-                            children: <Widget>[
-                              Container(child: firstNameField),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        Expanded( // wrap your Column in Expanded
-                          child: Column(
-                            children: <Widget>[
-                              Container(child: lastNameField),
-                            ] ,
-                          ),
-                        ),
-                      ],
-                    ),
-                    designationField,
+                    createTextField(NameController, "Name", "Add your name", "Please enter your Name", 50),
+                    createTextField(DesignationController, "Designation", "Add your Designation", "Please add your Designation", 10),
+                    createTextField(UniversityController, "University", "Add your University", "Please add your University", 20),
+                    createTextField(SpecializationController, "Specialization", "Add your Specilization", "Please add your Specilization", 20),
+                    createTextField(DescriptionController, "Description", "Add your Description", "Please add your Description", 100),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: submitButton,
@@ -273,5 +301,6 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
         ),
       ),
     );
+    
   }
 }

@@ -12,7 +12,7 @@ import 'dart:convert';
 class User {
   // User id
   final String uid;
-  bool isUpdate;
+  bool isUpdate = false;
   String gender;
   name name_ = name();
   location location_ = location();

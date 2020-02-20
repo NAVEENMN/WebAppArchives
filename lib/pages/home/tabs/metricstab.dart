@@ -16,7 +16,7 @@ Widget accountSummary(widget) {
     children: <Widget>[
       Row(
         children: <Widget>[
-          fontText('Account Metrics', 'Montserrat', true, Colors.black),
+          fontText('Account Metrics', 'Montserrat', true, Colors.black, 1.5),
           IconButton(icon: Icon(Icons.refresh), onPressed: () {
             widget.lg.log('Info','Running Account Summary');
           }
@@ -40,7 +40,7 @@ Widget researchSummary(widget) {
     children: <Widget>[
       Row(
         children: <Widget>[
-          fontText('Research Metrics', 'Montserrat', true, Colors.black),
+          fontText('Research Metrics', 'Montserrat', true, Colors.black, 1.5),
           IconButton(icon: Icon(Icons.refresh), onPressed: () {
             widget.lg.log('Info','Running Research Summary');
           }
