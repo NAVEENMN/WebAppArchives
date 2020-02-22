@@ -34,7 +34,7 @@ class database():
             log.info('Document not found')
         return status
 
-    def add_entry(self, db_name, coll_name, data, query = None):
+    def add_entry(self, db_name, coll_name, data, query=None):
         log.info('Adding Entry: db { %s }, collection { %s }', db_name, coll_name)
         resp = dict()
         resp['success'], resp['payload'] = False, None

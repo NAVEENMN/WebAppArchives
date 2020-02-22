@@ -71,8 +71,8 @@ def med_find_users():
                     filter = True
             else:
                 # get all results
-                filter=False
-                query= None
+                filter = False
+                query = None
 
             response = db.get_entry('Accounts', collection, query=query, filter=filter)
 
@@ -85,9 +85,15 @@ def med_find_users():
         collection = request.form.get('collection', type=str)
         if collection == "Medteam":
             operation = request.form.get('operation', type=str)
-            operations = ['add_user', 'update_user']
+            operations = ['addUser', 'updateUser']
+
             if operation not in operations:
-                return response
+                return flask.jsonify(response)
+
+            userId = request.form.get('userId')
+            data = request.form.get('payload')
+            if operation == "addUser":
+                response = db.add_entry(db_name='Accounts', coll_name=collection, data=data, query={'id': userId})
 
         elif collection == "Patients":
             operation = request.form.get('operation', type=str)

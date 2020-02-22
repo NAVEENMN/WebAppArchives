@@ -25,7 +25,7 @@
     },
     "languages": ["german", "mandarian", "english"],
     "areas": ["depression", "stress"],
-    "profilePicture": "https://vivly.s3-us-west-2.amazonaws.com/profileImages/prf.jpg",
+    "profilePicture": "prf.jpg",
     "contact" : {
       "email": "kenny@gmail.com",
       "phone": null
@@ -57,14 +57,14 @@
     },
     "languages": ["german", "hindi", "english"],
     "areas": ["cognitive behavioural", "addictions", "trauma"],
-    "profilePicture": "https://vivly.s3-us-west-2.amazonaws.com/profileImages/prf.jpg",
+    "profilePicture": "prf.jpg",
     "contact" : {
       "email": "darrel@gmail.com",
       "phone": null
     }
   },
   "m_3": {
-    "id": "m_3",
+    "id": "RC1AymdClNV791lk5Ls78zVlSzq1",
     "isUpdate": true,
     "title": "Dr",
     "name": {
@@ -89,7 +89,7 @@
     },
     "languages": ["kannada", "hindi", "english"],
     "areas": ["depression", "stress", "addictions", "trauma"],
-    "profilePicture": "https://vivly.s3-us-west-2.amazonaws.com/profileImages/prf.jpg",
+    "profilePicture": "prf.jpg",
     "contact" : {
       "email": "vijay@gmail.com",
       "phone": null
