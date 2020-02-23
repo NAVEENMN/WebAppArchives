@@ -2,6 +2,7 @@ import 'package:app/models/fontstyling.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/home/views/adminView.dart';
 import 'package:app/pages/home/views/userView.dart';
+import 'package:app/pages/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -11,7 +12,9 @@ var client = http.Client();
 
 class Home extends StatefulWidget {
   final User user;
-  Home(this.user);
+  final Utils utils;
+
+  Home(this.user, this.utils);
 
   @override
   _HomeState createState() => _HomeState();
@@ -63,7 +66,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         );
       } else {
-        return userView(usr: widget.user, control: control);
+        return userView(usr: widget.user, control: control, utils: widget.utils);
     }
   }
   }

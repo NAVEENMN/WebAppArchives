@@ -1,14 +1,18 @@
 import 'package:app/models/fontstyling.dart';
 import 'package:app/models/pallet.dart';
 import 'package:app/models/user.dart';
+import 'package:app/pages/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
 
 class userView extends StatefulWidget {
 
   final User usr;
   final TabController control;
-  userView({this.usr, this.control});
+  final Utils utils;
+
+  userView({this.usr, this.control, this.utils});
 
   @override
   _userViewState createState() => _userViewState();
@@ -23,7 +27,7 @@ class _userViewState extends State<userView> {
       if (!widget.usr.isUpdate) {
         Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
-          pageBuilder: (BuildContext context, _, __) => getUserDetailsScreen(widget.usr)));
+          pageBuilder: (BuildContext context, _, __) => getUserDetailsScreen(widget.usr, widget.utils)));
         }
     });
 
@@ -50,8 +54,6 @@ class _userViewState extends State<userView> {
   @override
   Widget build(BuildContext context) {
 
-    Pallet pallet = Pallet();
-
     String name = "";
     String email = "";
     String _location = "";
@@ -70,10 +72,10 @@ class _userViewState extends State<userView> {
       appBar: AppBar(
         title: fontText('Dashboard', 'Montserrat', true, Colors.white, 1.5),
         centerTitle: true,
-        backgroundColor: pallet.shadePolite0,
+        backgroundColor: widget.utils.pallet.shadePolite0,
         bottom: TabBar(
           controller: widget.control,
-          indicatorColor: pallet.shadePolite3,
+          indicatorColor: widget.utils.pallet.shadePolite3,
           tabs: <Widget>[
             Tab(
               child: Row(
@@ -144,7 +146,7 @@ class _userViewState extends State<userView> {
           Flexible(
             flex: 2, 
             child: Container(
-              color: pallet.shadeDark,
+              color: widget.utils.pallet.shadeDark,
               padding: EdgeInsets.all(10),
               child: TabBarView(
               controller: widget.control,
@@ -167,7 +169,8 @@ class _userViewState extends State<userView> {
 class getUserDetailsScreen extends StatefulWidget {
   
   final User usr;
-  getUserDetailsScreen(this.usr);
+  final Utils utils;
+  getUserDetailsScreen(this.usr, this.utils);
 
   @override
   _getUserDetailsScreenState createState() => _getUserDetailsScreenState();
@@ -178,18 +181,18 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Widget createTextField(TextEditingController controller, String label, String hint, String errorMsg, int length) {
-    Pallet pallet = new Pallet();
+    
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      color: pallet.shadePolite3,
+      color: widget.utils.pallet.shadePolite3,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          fontText(label, 'Esteban', true, pallet.shadePolite0, 1.8),
+          fontText(label, 'Esteban', true, widget.utils.pallet.shadePolite0, 1.8),
           TextFormField(
             style: TextStyle(
-              color: pallet.shadeBlue,
+              color: widget.utils.pallet.shadeBlue,
               fontWeight: FontWeight.normal
             ),
             maxLength: length,
@@ -254,20 +257,6 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
       validator: (value) => value.isEmpty ? 'Please enter your Designation': null,
     );
 
-    // Submit Button
-    final submitButton = RaisedButton(
-      color: Colors.lightGreen,
-      onPressed: () async {
-        print("submit");
-        widget.usr.isUpdate = true;
-        Navigator.pop(context);
-      },
-      child: Text(
-        'Submit',
-        style: TextStyle(color: Colors.white,),
-      ),
-    );
-
     final NameController = TextEditingController();
     final LocationController = TextEditingController();
     final DesignationController = TextEditingController();
@@ -275,6 +264,30 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
     final SpecializationController = TextEditingController();
     final DescriptionController = TextEditingController();
     
+        // Submit Button
+    final submitButton = RaisedButton(
+      color: Colors.lightGreen,
+      onPressed: () async {
+        print("submit");
+        widget.usr.isUpdate = true;
+        widget.usr.name_.firstName = NameController.text.toString();
+        widget.usr.profession_.designation = DesignationController.text.toString();
+        widget.usr.education_.universityName = UniversityController.text.toString();
+        widget.usr.profession_.specialities = SpecializationController.text.split(", ");
+        widget.usr.profession_.description = DesignationController.text.toString();
+        String payload = User.toJson(widget.usr);
+        String userId = widget.usr.uid.toString();
+        var resourceData = jsonEncode({'collection': 'Medteam', 'operation': 'addUser', 'userId': userId, 'payload': payload});
+        await widget.usr.addUserDetails(resourceData);
+        // Navigator.pop(context);
+      },
+      child: Text(
+        'Submit',
+        style: TextStyle(color: Colors.white,),
+      ),
+    );
+
+
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.85),
       body: Center(
