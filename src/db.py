@@ -156,15 +156,13 @@ def test(db):
 
 def main():
     db = database()
-    #db.get_collections('Users')
-    #db.delete_entry('Users', 'account', query={'name': 'naveen'}, delete_many=True)
-    #db.find_entry('Medteam', 'Accounts', query={'specialities': ['Ayurveda'] }, all_entry=True)
-    #r = db.find_entry('Medteam', 'Accounts', query={'user_id':'91235'}, all_entry=False)
-    #r = db.find_entry('Medteam', 'Accounts', query={'languages':{'$in': ['Tamil', 'English'] }}, all_entry=True)
-    #print(r)
-    #r = db.check_if_doc_exist('Accounts', 'Medteam', query={'name': 'Ke Xu'})
-    #print(r)
-    print(test(db))
+    test = json.dumps(load_template_data('template_data/medteam_accounts.json'))
+    k = json.loads(test)
+    for sam in k:
+        data = k[sam]
+        print(data, type(data))
+        print(data["location"], type(data["location"]))
+    #print(test(db))
 
 if __name__ == "__main__":
     main()
