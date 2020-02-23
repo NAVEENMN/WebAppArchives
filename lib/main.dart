@@ -9,6 +9,7 @@ void main() => runApp(RootApp());
 class RootApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(

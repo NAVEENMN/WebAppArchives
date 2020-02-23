@@ -2,10 +2,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+
+
 class Server {
 
   String ip = "52.39.96.192";
-
+ 
   // ex: resourceUrl: accounts, params: collection=Medteam&filter_by=id&id=m_1
   Future<dynamic> getData(String resourceUrl, String params) async {
     print("Http: Making a GET request");
@@ -33,6 +35,4 @@ class Server {
     print("Http: Got response");
     return data.body;
   }
-
-
 }

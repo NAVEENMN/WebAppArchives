@@ -1,5 +1,6 @@
 import 'package:app/models/user.dart';
 import 'package:app/services/auth.dart';
+import 'package:app/services/loading.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -14,7 +15,7 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final email_controller = TextEditingController();
   final password_controller = TextEditingController();
-
+  bool loading = false;
 
   @override
   void dispose() {
@@ -49,6 +50,9 @@ class _SignInState extends State<SignIn> {
       color: Colors.lightGreen,
       onPressed: () async {
         if (_formKey.currentState.validate()) {
+          setState(() {
+            loading = true;
+          });
           dynamic result = await _auth.signInWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
             print("Failed to Sign In");
@@ -56,6 +60,9 @@ class _SignInState extends State<SignIn> {
             print("Sign in success");
             widget.user.email = email_controller.text;
           }
+          setState(() {
+            loading = false;
+          });
         }
       },
       child: Text(
@@ -66,7 +73,7 @@ class _SignInState extends State<SignIn> {
       ),
     );
 
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
