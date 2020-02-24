@@ -1,4 +1,6 @@
 import 'package:app/services/firebasedb.dart';
+import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firestore.dart' as fs;
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -6,6 +8,7 @@ import 'dart:convert';
 import 'package:app/models/server.dart';
 
 class Name {
+
   String title;
   String firstName;
   String lastName;
@@ -20,6 +23,20 @@ class Name {
     };
     String result = jsonEncode(map());
     return result;
+  }
+  
+  Map getMap() {
+    return {
+      'title': this.title,
+      'firstName': this.firstName,
+      'lastName': this.lastName
+    };
+  }
+
+  void setMap(Map<String, dynamic> data) {
+    this.title = data['title'];
+    this.firstName = data['firstName'];
+    this.lastName = data['lastName'];
   }
 
 }
@@ -43,6 +60,22 @@ class Location {
     return result;
   }
 
+  Map getMap() {
+    return {
+      'cityName': this.cityName,
+      'stateName': this.stateName,
+      'countryName': this.countryName,
+      'zipCode': this.zipCode
+    };
+  }
+
+  void setMap(Map<String, dynamic> data) {
+    this.cityName = data['cityName'];
+    this.stateName = data['stateName'];
+    this.countryName = data['countryName'];
+    this.zipCode = data['zipCode'];
+  }
+
 }
 
 class Profession {
@@ -62,6 +95,20 @@ class Profession {
     return result;
   }
 
+  Map getMap() {
+    return {
+      'designation': this.designation,
+      'specialities': this.specialities,
+      'description': this.description
+    };
+  }
+
+  void setMap(Map<String, dynamic> data) {
+    this.designation = data['designation'];
+    this.specialities = data['specialities'];
+    this.description = data['description'];
+  }
+
 }
 
 class Education {
@@ -79,6 +126,18 @@ class Education {
     return result;
   }
 
+  Map getMap() {
+    return {
+      'degreeName': this.degreeName,
+      'universityName': this.universityName
+    };
+  }
+
+  void setMap(Map<String, dynamic> data) {
+    this.degreeName = data['degreeName'];
+    this.universityName = data['universityName'];
+  }
+  
 
 }
 
@@ -95,6 +154,18 @@ class Contact {
     };
     String result = jsonEncode(map());
     return result;
+  }
+
+  Map getMap() {
+    return {
+      'email': this.email,
+      'phone': this.phone
+    };
+  }
+
+  void setMap(Map<String, dynamic> data) {
+    this.email = data['email'];
+    this.phone = data['phone'];
   }
 
 }
@@ -114,6 +185,8 @@ class User {
   List<dynamic> areas = new List<dynamic>();
   String profilePic = "";
   bool isUpdate = false;
+
+  final fs.Firestore firestore = fb.firestore();
    
   User({this.uid, this.email});
 
@@ -145,11 +218,11 @@ class User {
       'uid': this.uid,
       'email': this.email,
       'gender': this.gender,
-      'name': Name.toJson(this.name_),
-      'location': Location.toJson(this.location_),
-      'education': Education.toJson(this.education_),
-      'profession': Profession.toJson(this.profession_),
-      'contact': Contact.toJson(this.contact_),
+      'name': this.name_.getMap(),
+      'location': this.location_.getMap(),
+      'education': this.education_.getMap(),
+      'profession': this.profession_.getMap(),
+      'contact': this.contact_.getMap(),
       'languages': this.languages,
       'areas': this.areas,
       'profilePicture': this.profilePic,
@@ -159,7 +232,9 @@ class User {
 
   Future<void> updateUserDetails(DatabaseService ref) async {
     print("Adding User details");
-    await ref.updateData('medteam', 'details', getMap());
+
+    await firestore.collection('MedAccounts').doc(this.uid).set({'details': getMap()});
+
     // Legacy code
     /*
     String resourceUrl = "accounts";
@@ -170,6 +245,33 @@ class User {
   }
 
   Future<void> getUserDetails() async {
+    print("Getting User details");
+    await firestore.collection('MedAccounts').doc(this.uid).get().then((snapshot) {
+      print(snapshot.data().keys);
+      if(snapshot.exists) {
+        print("Found record");
+        Map<String, dynamic> data = snapshot.data();
+        this.name_.setMap(data['details']['name']);
+        this.location_.setMap(data['details']['location']);
+        this.education_.setMap(data['details']['education']);
+        this.contact_.setMap(data['details']['contact']);
+        this.profession_.setMap(data['details']['profession']);
+        this.languages = data['details']['languages'];
+        this.areas = data['details']['areas'];
+        this.profilePic = data['details']['profilePicture'];
+        this.isUpdate = true;
+      } else {
+        print('Not such document or couldnt get data');
+        this.isUpdate = false;
+      }
+      }).catchError(() {
+        print('Exception');
+        this.isUpdate = false;
+      }
+    );
+  }
+
+  Future<void> getUserDetails_() async {
     print("Getting User details");
     String resourceUrl = "accounts";
     String params = "collection=Medteam&filter_by=id&id=${uid}";
