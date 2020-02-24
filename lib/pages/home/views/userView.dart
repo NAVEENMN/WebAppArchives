@@ -276,10 +276,10 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
         widget.usr.education_.universityName = UniversityController.text.toString();
         widget.usr.profession_.specialities = SpecializationController.text.split(", ");
         widget.usr.profession_.description = DesignationController.text.toString();
-        String payload = User.toJson(widget.usr);
-        String userId = widget.usr.uid.toString();
-        var resourceData = jsonEncode({'collection': 'Medteam', 'operation': 'addUser', 'userId': userId, 'payload': payload});
-        await widget.usr.updateUserDetails(widget.utils.fdb, resourceData);
+        //String payload = User.toJson(widget.usr);
+        // String userId = widget.usr.uid.toString();
+        //var resourceData = jsonEncode({'collection': 'Medteam', 'operation': 'addUser', 'userId': userId, 'payload': payload});
+        await widget.usr.updateUserDetails(widget.utils.fdb);
         // Navigator.pop(context);
       },
       child: Text(

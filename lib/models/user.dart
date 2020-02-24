@@ -140,9 +140,26 @@ class User {
 
   Server server = Server();
   
-  Future<void> updateUserDetails(DatabaseService ref, String jsonData) async {
+  Map getMap() {
+    return {
+      'uid': this.uid,
+      'email': this.email,
+      'gender': this.gender,
+      'name': Name.toJson(this.name_),
+      'location': Location.toJson(this.location_),
+      'education': Education.toJson(this.education_),
+      'profession': Profession.toJson(this.profession_),
+      'contact': Contact.toJson(this.contact_),
+      'languages': this.languages,
+      'areas': this.areas,
+      'profilePicture': this.profilePic,
+      'isUpdate': this.isUpdate
+    };
+  }
+
+  Future<void> updateUserDetails(DatabaseService ref) async {
     print("Adding User details");
-    await ref.updateData('medteam', 'details', jsonData);
+    await ref.updateData('medteam', 'details', getMap());
     // Legacy code
     /*
     String resourceUrl = "accounts";
