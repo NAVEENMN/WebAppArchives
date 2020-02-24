@@ -1,3 +1,4 @@
+import 'package:app/services/firebasedb.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -138,13 +139,17 @@ class User {
   }
 
   Server server = Server();
-
-  Future<void> addUserDetails(String jsonData) async {
+  
+  Future<void> updateUserDetails(DatabaseService ref, String jsonData) async {
     print("Adding User details");
+    await ref.updateData('medteam', 'details', jsonData);
+    // Legacy code
+    /*
     String resourceUrl = "accounts";
     http.Response data = await server.postData(resourceUrl, jsonData);
     print(data.body);
     return;
+    */
   }
 
   Future<void> getUserDetails() async {

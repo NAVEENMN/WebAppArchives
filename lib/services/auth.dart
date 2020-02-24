@@ -1,4 +1,5 @@
 import 'package:app/models/user.dart';
+import 'package:app/services/firebasedb.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Authentication Services

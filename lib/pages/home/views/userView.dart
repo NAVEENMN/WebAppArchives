@@ -2,6 +2,7 @@ import 'package:app/models/fontstyling.dart';
 import 'package:app/models/pallet.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/wrapper.dart';
+import 'package:app/services/firebasedb.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -278,7 +279,7 @@ class _getUserDetailsScreenState extends State<getUserDetailsScreen> {
         String payload = User.toJson(widget.usr);
         String userId = widget.usr.uid.toString();
         var resourceData = jsonEncode({'collection': 'Medteam', 'operation': 'addUser', 'userId': userId, 'payload': payload});
-        await widget.usr.addUserDetails(resourceData);
+        await widget.usr.updateUserDetails(widget.utils.fdb, resourceData);
         // Navigator.pop(context);
       },
       child: Text(

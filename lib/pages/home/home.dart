@@ -1,8 +1,11 @@
 import 'package:app/models/fontstyling.dart';
+import 'package:app/models/pallet.dart';
+import 'package:app/models/server.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/home/views/adminView.dart';
 import 'package:app/pages/home/views/userView.dart';
 import 'package:app/pages/wrapper.dart';
+import 'package:app/services/firebasedb.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -28,6 +31,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   
   void getUserDetails() async {
     print("Get user details");
+    var now = new DateTime.now();
+    await widget.utils.fdb.updateUserlogin('userDetails', {'loginTime': now.toString()});
     await widget.user.getUserDetails();
     setState(() {
       loadingScreen = false;

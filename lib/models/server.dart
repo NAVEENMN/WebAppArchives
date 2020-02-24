@@ -2,8 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-
-
 class Server {
 
   String ip = "52.39.96.192";
