@@ -73,6 +73,75 @@ class _SignInState extends State<SignIn> {
       ),
     );
 
+    if (loading) {
+      return Loading();
+    } else {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Column(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Vivly",
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.bold
+                            ),),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
+                                child: emailField,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
+                                child: passwordField,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                child: signinButton,
+                              )
+                            ],
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  flex: 3,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/background/background.png"),
+                        fit: BoxFit.cover
+                      )
+                    )
+                  ),
+                ),
+              ],
+            ),
+          )
+        )
+      );
+    }
+    /*
     return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -106,5 +175,6 @@ class _SignInState extends State<SignIn> {
         ),
       )
     );
+    */
   }
 }

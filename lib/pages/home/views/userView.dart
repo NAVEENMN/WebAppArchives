@@ -147,13 +147,22 @@ class _userViewState extends State<userView> {
           Flexible(
             flex: 2, 
             child: Container(
-              color: widget.utils.pallet.shadeDark,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/background/homeBackground.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
               padding: EdgeInsets.all(10),
               child: TabBarView(
               controller: widget.control,
               children: <Widget>[
-                Text('Patients'),
-                Text('Records'),
+                Center(
+                  child: Text('Patients'),
+                ),
+                Center(
+                  child: Text('To be implemented'),
+                ),
                 Center(
                   child: Text('To be implemented'),
                   )
