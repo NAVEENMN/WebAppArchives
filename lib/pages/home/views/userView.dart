@@ -1,5 +1,6 @@
 import 'package:app/models/fontstyling.dart';
 import 'package:app/models/pallet.dart';
+import 'package:app/models/patients.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/home/tabs/patientstab.dart';
 import 'package:app/pages/wrapper.dart';
@@ -159,7 +160,7 @@ class _userViewState extends State<userView> {
               controller: widget.control,
               children: <Widget>[
                 Center(
-                  child: patientsTab(),
+                  child: patientsTab(widget.usr, Patients(widget.usr)),
                 ),
                 Center(
                   child: Text('To be implemented'),

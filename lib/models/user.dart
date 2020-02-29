@@ -183,6 +183,8 @@ class User {
   Contact contact_ = Contact();
   List<dynamic> languages = new List<dynamic>();
   List<dynamic> areas = new List<dynamic>();
+  List<dynamic> patientIds = new List<dynamic>();
+  List<dynamic> incomingPatientIds = new List<dynamic>();
   String profilePic = "";
   bool isUpdate = false;
 
@@ -247,7 +249,6 @@ class User {
   Future<void> getUserDetails() async {
     print("Getting User details");
     await firestore.collection('MedAccounts').doc(this.uid).get().then((snapshot) {
-      print(snapshot.data().keys);
       if(snapshot.exists) {
         print("Found record");
         Map<String, dynamic> data = snapshot.data();
@@ -259,6 +260,9 @@ class User {
         this.languages = data['details']['languages'];
         this.areas = data['details']['areas'];
         this.profilePic = data['details']['profilePicture'];
+        // Patients
+        print(data['patients']);
+        this.patientIds = data['patients'];
         this.isUpdate = true;
       } else {
         print('Not such document or couldnt get data');
