@@ -1,3 +1,4 @@
+import 'package:app/models/pallet.dart';
 import 'package:app/models/user.dart';
 import 'package:app/services/auth.dart';
 import 'package:app/services/loading.dart';
@@ -28,6 +29,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
 
+    Pallet pallet = Pallet();
     final _formKey = GlobalKey<FormState>();
 
     // Email Section
@@ -89,14 +91,25 @@ class _SignInState extends State<SignIn> {
                       Flexible(
                         flex: 2,
                         child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Vivly",
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.bold
-                            ),),
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Image.asset('assets/images/logo/logo.png',
+                                height: 100,
+                                width: 100),
+                              ),
+                              Text(
+                                'HELIX',
+                                style: TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat',
+                                  color: pallet.shadeDark
+                                ),
+                                )
+                            ],
+                          ),
                         ),
                       ),
                       Flexible(
@@ -105,6 +118,7 @@ class _SignInState extends State<SignIn> {
                           key: _formKey,
                           child: Column(
                             children: <Widget>[
+                              SizedBox(height: 50,),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 18.0),
                                 child: emailField,
