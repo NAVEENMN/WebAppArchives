@@ -3,6 +3,7 @@ import 'package:app/models/user.dart';
 import 'package:app/services/auth.dart';
 import 'package:app/services/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class SignIn extends StatefulWidget {
   User user;
@@ -58,6 +59,10 @@ class _SignInState extends State<SignIn> {
           dynamic result = await _auth.signInWithEmailAndPassword(email_controller.text, password_controller.text);
           if (result == null) {
             print("Failed to Sign In");
+            showSimpleNotification(
+              Text("Invalid email or password"),
+              background: Colors.lightBlue,
+            );
           } else {
             print("Sign in success");
             widget.user.email = email_controller.text;
