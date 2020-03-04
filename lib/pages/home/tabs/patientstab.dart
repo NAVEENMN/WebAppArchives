@@ -27,6 +27,7 @@ Widget listPatients(Patients patients) {
       Text('Patients'),
       SizedBox(height: 15.0),
       Container(
+        height: 500,
         child: FutureBuilder(
           future: _getpatients(patients),
           builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -38,11 +39,12 @@ Widget listPatients(Patients patients) {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  print("sa");
                   print(snapshot.data[index]);
+                  String heading = snapshot.data[index].id +": "+snapshot.data[index].name;
+                  String desp = "Age: "+snapshot.data[index].age+" Gender: "+snapshot.data[index].gender;
                   return ListTile(
-                    title: Text(snapshot.data[index].patientName),
-                    subtitle: Text(snapshot.data[index].patientId),
+                    title: Text(heading),
+                    subtitle: Text(desp),
                   );
                 },
               );
@@ -68,7 +70,6 @@ class _patientsTabState extends State<patientsTab> {
           Flexible(
             flex: 1,
             child: Container(
-              
               child: listPatients(widget.patients),
             ),
           ),

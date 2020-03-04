@@ -4,9 +4,14 @@ import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;
 
 class Patient {
-  final String patientId;
-  final String patientName;
-  Patient({this.patientId, this.patientName});
+  final String id;
+  final String name;
+  final String age;
+  final String gender;
+  Patient({this.id, 
+    this.name,
+    this.age,
+    this.gender});
 }
 
 class Patients {
@@ -26,7 +31,10 @@ class Patients {
         if(snapshot.exists) {
           Map<String, dynamic> data = snapshot.data();
           print(data);
-          Patient _patient = Patient(patientId: patientId, patientName: data['name']);
+          Patient _patient = Patient(id: patientId, 
+            name: data['name'],
+            age: data['age'],
+            gender: data['gender']);
           this.patientDetails.add(_patient);
         } else {
           print('Not such document or couldnt get data');
