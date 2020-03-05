@@ -1,3 +1,4 @@
+import 'package:app/models/pallet.dart';
 import 'package:app/models/patients.dart';
 import 'package:app/models/user.dart';
 import 'package:flutter/material.dart';
@@ -18,16 +19,14 @@ Future<List<Patient>> _getpatients(Patients patients) async {
 }
 
 
-Widget listPatients(Patients patients) {
-
+Widget listPatients(Patients patients, setPatientDetails) {
+  Pallet pallet = Pallet();
   return ListView(
     padding: EdgeInsets.all(10),
     children: <Widget>[
-      SizedBox(height: 10,),
-      Text('Patients'),
-      SizedBox(height: 15.0),
       Container(
         height: 500,
+        color: pallet.shadePolite4,
         child: FutureBuilder(
           future: _getpatients(patients),
           builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -45,6 +44,11 @@ Widget listPatients(Patients patients) {
                   return ListTile(
                     title: Text(heading),
                     subtitle: Text(desp),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      print("clicked $index");
+                      setPatientDetails(index); 
+                    },
                   );
                 },
               );
@@ -58,11 +62,38 @@ Widget listPatients(Patients patients) {
 }
 
 
+class _patientDetails extends StatefulWidget {
+  int patientID;
+  _patientDetails(this.patientID);
+  @override
+  __patientDetailsState createState() => __patientDetailsState();
+}
+
+class __patientDetailsState extends State<_patientDetails> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(widget.patientID.toString()),
+      ),
+    );
+  }
+}
+
 class _patientsTabState extends State<patientsTab> {
+
+  int patientIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     print("building patients tab");
+
+    void setPatientDetails(int index){
+      setState(() {
+        patientIndex = index;
+      });
+    }
 
     return Container(
       child: Row(
@@ -70,13 +101,13 @@ class _patientsTabState extends State<patientsTab> {
           Flexible(
             flex: 1,
             child: Container(
-              child: listPatients(widget.patients),
+              child: listPatients(widget.patients, setPatientDetails),
             ),
           ),
           Flexible(
             flex: 1,
             child: Center(
-              child: Text('Loading'),
+              child: _patientDetails(patientIndex),
             ),
           ),
         ],

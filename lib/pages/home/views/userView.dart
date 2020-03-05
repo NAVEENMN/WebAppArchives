@@ -84,7 +84,7 @@ class _userViewState extends State<userView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.assessment),
+                  Icon(Icons.people),
                   SizedBox(width: 2,),
                   fontText('Patients', 'Montserrat', false, Colors.white, 1.5),
                 ],
@@ -94,7 +94,7 @@ class _userViewState extends State<userView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.people),
+                  Icon(Icons.chat),
                   SizedBox(width: 2,),
                   fontText('Accounts', 'Montserrat', false, Colors.white, 1.5),
                 ],
