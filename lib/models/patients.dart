@@ -17,6 +17,7 @@ class Patient {
 class Patients {
   final User user;
   List<Patient> patientDetails = new List<Patient>();
+  Patient currentPatient;
 
   Patients(this.user);
 
@@ -25,6 +26,8 @@ class Patients {
   Future<void> getPatientDetails() async {
     print("Getting Patient details");
     print(user.patientIds);
+    // sanity clearing
+    patientDetails.clear();
     for(var i=0; i<user.patientIds.length; i++) {
       String patientId = user.patientIds[i];
       await firestore.collection('PatientDetails').doc(patientId).get().then((snapshot) {

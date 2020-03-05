@@ -35,6 +35,7 @@ Widget listPatients(Patients patients, setPatientDetails) {
                 child: Text('Loading..'),
               );
             } else {
+              // for initial setup
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -47,6 +48,7 @@ Widget listPatients(Patients patients, setPatientDetails) {
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       print("clicked $index");
+                      patients.currentPatient = patients.patientDetails[index];
                       setPatientDetails(index); 
                     },
                   );
@@ -64,7 +66,8 @@ Widget listPatients(Patients patients, setPatientDetails) {
 
 class _patientDetails extends StatefulWidget {
   int patientID;
-  _patientDetails(this.patientID);
+  Patients patientInfos;
+  _patientDetails(this.patientID, this.patientInfos);
   @override
   __patientDetailsState createState() => __patientDetailsState();
 }
@@ -73,11 +76,22 @@ class __patientDetailsState extends State<_patientDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    print("budd");
+    if (widget.patientInfos.patientDetails.length == 0) {
+      return Scaffold(
+      body: Center(
+        child: Text("No patients"),
+      ),
+    );
+    } else {
+      print("name");
+      print(widget.patientInfos.currentPatient.name);
+      return Scaffold(
       body: Center(
         child: Text(widget.patientID.toString()),
       ),
     );
+    }
   }
 }
 
@@ -107,7 +121,7 @@ class _patientsTabState extends State<patientsTab> {
           Flexible(
             flex: 1,
             child: Center(
-              child: _patientDetails(patientIndex),
+              child: _patientDetails(patientIndex, widget.patients),
             ),
           ),
         ],
