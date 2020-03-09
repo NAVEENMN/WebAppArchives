@@ -69,6 +69,8 @@ class _userViewState extends State<userView> {
       _location = "${widget.usr.location_.cityName}, ${widget.usr.location_.stateName}";
       professionalDescription = widget.usr.profession_.description;
       profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${widget.usr.uid}.jpg";
+      print('image url');
+      print(profileImageUrl);
     }
 
     return Scaffold(

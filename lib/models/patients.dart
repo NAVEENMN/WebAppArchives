@@ -4,20 +4,15 @@ import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;
 
 class Patient {
-  final String id;
-  final String name;
-  final String age;
-  final String gender;
-  Patient({this.id, 
-    this.name,
-    this.age,
-    this.gender});
+  final Map<String, dynamic> infoJson;
+  Patient({this.infoJson});
 }
 
 class Patients {
   final User user;
   List<Patient> patientDetails = new List<Patient>();
   Patient currentPatient;
+  bool setFlag = false;
 
   Patients(this.user);
 
@@ -33,11 +28,11 @@ class Patients {
       await firestore.collection('PatientDetails').doc(patientId).get().then((snapshot) {
         if(snapshot.exists) {
           Map<String, dynamic> data = snapshot.data();
+          print("--");
+          print("fb data");
           print(data);
-          Patient _patient = Patient(id: patientId, 
-            name: data['name'],
-            age: data['age'],
-            gender: data['gender']);
+          print("--");
+          Patient _patient = Patient(infoJson: data);
           this.patientDetails.add(_patient);
         } else {
           print('Not such document or couldnt get data');
