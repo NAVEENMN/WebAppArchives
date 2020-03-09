@@ -125,6 +125,35 @@ class _patientDetails extends StatefulWidget {
   }
 
 Widget _bioCard(String label, List<Widget> details){
+
+  return Card(
+    child: Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: fontText(label, 'Esteban', true, Colors.black, 2),
+            ),
+          ),
+          Expanded(
+            flex: 9,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: SizedBox(
+                child: new ListView(
+                children: details,
+                ),
+              ), 
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+
+  /*
   return Card(
     child: Column(
       children: <Widget>[
@@ -134,22 +163,59 @@ Widget _bioCard(String label, List<Widget> details){
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: Column(
-            children: details,
+          child: new SizedBox(
+            child: new ListView(
+              children: details,
+            ),
           ),
         ),
       ],
     ),
   );
+  */
 }
 
 Widget _lableValue(String label, String value){
+  /*
+  return Row(
+    children: <Widget>[
+      Card(
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: Container(
+                height: 40,
+                width: 10,
+                color: Colors.green,
+              ),
+            ),
+            Flexible(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: fontText(label, 'Esteban', false, Colors.black, 1.8),
+              )
+            )
+          ],
+        ),
+      ),
+      Card(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          child: fontText(value, 'Esteban', false, Colors.black, 1.8),
+        ),
+      ),
+    ],
+  );
+  */
+  
   return Row(
     children: <Widget>[
       Flexible(
         flex: 1,
         child: Container(
-          height: 20,
+          height: 40,
           width: 10,
           color: Colors.green,
         ),
@@ -166,6 +232,7 @@ Widget _lableValue(String label, String value){
       )
     ],
   );
+  
 }
 
 class __patientDetailsState extends State<_patientDetails> {
