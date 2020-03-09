@@ -48,8 +48,8 @@ Widget listPatients(Patients patients, setPatientDetails) {
                   print("---");
                   String heading = info['info']['name'] +": "+info['info']['id'];
                   String desp = "Age: "+info['info']['age']+" Gender: "+info['info']['gender'];
-                  String prf = 'RC1AymdClNV791lk5Ls78zVlSzq1';
-                  String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}.jpg";
+                  String prf = info['info']['profileImage'];
+                  String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}";
                   return ListTile(
                     title: Text(heading),
                     subtitle: Text(desp),
@@ -93,10 +93,11 @@ class _patientDetails extends StatefulWidget {
 }
 
   Widget _nameCard(Map<String, dynamic> info) {
-    String prf = 'RC1AymdClNV791lk5Ls78zVlSzq1';
-    String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}.jpg";
+    String prf = info['profileImage'];
+    String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}";
     String line1 = info['name']+" ("+info['id']+")";
-    String line2 = "age: "+info['age']+" gender: "+info['gender']+" racial backgroung: "+info['race'];
+    String line2 = "age: "+info['age']+" gender: "+info['gender'];
+    String line3 = info['race'];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -118,6 +119,7 @@ class _patientDetails extends StatefulWidget {
           children: <Widget>[
             fontText(line1, 'Esteban', true, Colors.black, 2),
             fontText(line2, 'Esteban', true, Colors.black26, 1.5),
+            fontText(line3, 'Esteban', true, Colors.black26, 1.5),
           ],
         )
       ],
@@ -152,64 +154,9 @@ Widget _bioCard(String label, List<Widget> details){
       ),
     ),
   );
-
-  /*
-  return Card(
-    child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: fontText(label, 'Esteban', true, Colors.black, 2),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: new SizedBox(
-            child: new ListView(
-              children: details,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-  */
 }
 
-Widget _lableValue(String label, String value){
-  /*
-  return Row(
-    children: <Widget>[
-      Card(
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: Container(
-                height: 40,
-                width: 10,
-                color: Colors.green,
-              ),
-            ),
-            Flexible(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                child: fontText(label, 'Esteban', false, Colors.black, 1.8),
-              )
-            )
-          ],
-        ),
-      ),
-      Card(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: fontText(value, 'Esteban', false, Colors.black, 1.8),
-        ),
-      ),
-    ],
-  );
-  */
-  
+Widget _lableValue(String label, String value){  
   return Row(
     children: <Widget>[
       Flexible(
