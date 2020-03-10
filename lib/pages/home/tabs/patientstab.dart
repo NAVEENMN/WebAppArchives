@@ -126,8 +126,25 @@ class _patientDetails extends StatefulWidget {
     );
   }
 
-Widget _bioCard(String label, List<Widget> details){
+Widget _detailsCard(Map<String, dynamic> infodetails) {
+  String line1 = "Title : " + infodetails['title'];
+  String line2 = "Subtitle : " + infodetails['subTitle'];
+  String line3 = "Details : " + infodetails['details'];
+  return Card(
+    child: Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          fontText(line1, 'Esteban', true, Colors.black, 2),
+          fontText(line2, 'Esteban', true, Colors.black26, 1.5),
+          fontText(line3, 'Esteban', true, Colors.black26, 1.5),
+        ],
+      ),
+    ),
+  );
+}
 
+Widget _bioCard(String label, List<Widget> details){
   return Card(
     child: Container(
       child: Column(
@@ -145,7 +162,7 @@ Widget _bioCard(String label, List<Widget> details){
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: SizedBox(
                 child: new ListView(
-                children: details,
+                  children: details,
                 ),
               ), 
             ),
@@ -195,10 +212,11 @@ class __patientDetailsState extends State<_patientDetails> {
     );
     } else {
       Map<String, dynamic> info = widget.patientInfo.infoJson['info'];
+      Map<String, dynamic> infocase = widget.patientInfo.infoJson['case'];
       List<Widget> bioCards = new List();
 
       for (var key in widget.patientInfo.infoJson.keys) {
-        if( key == "info" ){
+        if( key == "info" || key == "case" ){
           continue;
         }
         List<Widget> bioDetailsCards = new List();
@@ -224,11 +242,22 @@ class __patientDetailsState extends State<_patientDetails> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: _nameCard(info),
+            Flexible(
+              flex: 2,
+              child: Card(
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: _nameCard(info),
+              ),
             ),
-            Expanded(
+            Flexible(
+              flex: 4,
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                child: _detailsCard(infocase),
+              ),
+            ),
+            Flexible(
+              flex: 4,
               child: Container(
                 padding: EdgeInsets.all(10.0),
                 child: Scaffold(
