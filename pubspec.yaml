@@ -53,6 +53,20 @@ flutter:
     - assets/images/background/background.png
     - assets/images/background/homeBackground.png
     - assets/images/logo/logo.png
+  
+  fonts:
+    - family: Esteban
+      fonts:
+        - asset: assets/fonts/Esteban-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
