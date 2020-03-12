@@ -162,7 +162,7 @@ class _userViewState extends State<userView> {
               controller: widget.control,
               children: <Widget>[
                 Center(
-                  child: patientsTab(widget.usr, Patients(widget.usr)),
+                  child: patientsTab(widget.usr, Patients(widget.usr), widget.utils.fdb),
                 ),
                 Center(
                   child: Text('To be implemented'),

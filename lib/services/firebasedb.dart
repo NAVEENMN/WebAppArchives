@@ -15,7 +15,11 @@ class DatabaseService {
   
   Future updateData(var ref, String key, var data) async {    
     var response = await ref.set({key: data});
-    print(response);
+    return;
+  }
+
+  Future updatePatientInvestigateData(String patientID, var data) async {
+    firestore.collection('PatientDetails').doc(patientID).set(data);
     return;
   }
 

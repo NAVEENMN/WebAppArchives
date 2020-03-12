@@ -4,12 +4,14 @@ import 'package:app/models/fontstyling.dart';
 import 'package:app/models/pallet.dart';
 import 'package:app/models/patients.dart';
 import 'package:app/models/user.dart';
+import 'package:app/services/firebasedb.dart';
 import 'package:flutter/material.dart';
 
 class patientsTab extends StatefulWidget {
   User user;
   Patients patients;
-  patientsTab(this.user, this.patients);
+  DatabaseService db;
+  patientsTab(this.user, this.patients, this.db);
   @override
   _patientsTabState createState() => _patientsTabState();
 }
@@ -41,11 +43,7 @@ Widget listPatients(Patients patients, setPatientDetails) {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  print("---");
                   Map<String, dynamic> info = snapshot.data[index].infoJson;
-                  print(info['info']);
-                  print(info['info']['name']);
-                  print("---");
                   String heading = info['info']['name'] +": "+info['info']['id'];
                   String desp = "Age: "+info['info']['age']+" Gender: "+info['info']['gender'];
                   String prf = info['info']['profileImage'];
@@ -87,13 +85,17 @@ Widget listPatients(Patients patients, setPatientDetails) {
 class _patientDetails extends StatefulWidget {
   bool patientSet;
   Patient patientInfo;
-  _patientDetails(this.patientSet, this.patientInfo);
+  DatabaseService db;
+  _patientDetails(this.patientSet, this.patientInfo, this.db);
   @override
   __patientDetailsState createState() => __patientDetailsState();
 }
 
-  Widget _nameCard(Map<String, dynamic> info) {
-
+  Widget _nameCard(Map<String, dynamic> _info) {
+    Map<String, dynamic> info = _info['info'];
+    print("name card");
+    print(info);
+    print("====");
     String prf = info['profileImage'];
     String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}";
     String line1 = info['name']+" ("+info['id']+")";
@@ -261,35 +263,53 @@ Widget _lableValue(String label, String value){
   
 }
 
-Widget _prognosis(String prognosisDetails) {
-  return Container(
-    padding: EdgeInsets.all(10.0),
-    child: Text(prognosisDetails),
-  );
+Widget _prognosis(TextEditingController controller, String prognosisDetails, bool isEdit) {
+  
+  if (isEdit) {
+    controller.text = prognosisDetails;
+    /*
+    controller.addListener(() {
+      prognosisDetails = controller.value.text;
+    });
+    */
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: TextField(
+        maxLines: 20,
+        controller: controller,
+      )
+    );
+  } else {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Text(prognosisDetails),
+    );
+  }
+  
 }
 
-Widget _diagnosis(String diagnosisDetails) {
+Widget _diagnosis(TextEditingController controller, String diagnosisDetails, bool isEdit) {
   return Container(
     padding: EdgeInsets.all(10.0),
     child: Text(diagnosisDetails),
   );
 }
 
-Widget _treatment(String treatmentDetails) {
+Widget _treatment(TextEditingController controller, String treatmentDetails, bool isEdit) {
   return Container(
     padding: EdgeInsets.all(10.0),
     child: Text(treatmentDetails),
   );
 }
 
-Widget _notes(String notesDetails) {
+Widget _notes(TextEditingController controller, String notesDetails, bool isEdit) {
   return Container(
     padding: EdgeInsets.all(10.0),
     child: Text(notesDetails),
   );
 }
 
-Widget _reports(List<Widget> bioCards) {
+Widget _reports(List<Widget> bioCards, bool isEdit) {
   return Container(
     padding: EdgeInsets.all(10.0),
     child: Scaffold(
@@ -301,8 +321,21 @@ Widget _reports(List<Widget> bioCards) {
   );
 }
 
-Widget _patientInvestigation(Map<String, dynamic> infocase, List<Widget> bioCards) {
-          
+Widget _patientInvestigation(Map<String, dynamic> _info, List<Widget> bioCards, 
+  bool isEdit, setEditStatus, DatabaseService db) {
+
+  String patientID = _info['info']['id'];
+  Map<String, dynamic> infocase = _info['case'];
+
+  Icon editIcon;
+  TextEditingController controller = TextEditingController();
+
+  if(isEdit) {
+    editIcon = Icon(Icons.save);
+  } else {
+    editIcon = Icon(Icons.edit);
+  }
+  
   return DefaultTabController(
     length: 6,
     child: Scaffold(
@@ -377,15 +410,29 @@ Widget _patientInvestigation(Map<String, dynamic> infocase, List<Widget> bioCard
     body: Container(
       child: TabBarView(
         children: <Widget>[
-          _prognosis(infocase['prognosis']),
-          _diagnosis(infocase['diagnosis']),
-          _treatment(infocase['treatment']),
-          _reports(bioCards),
-          _notes(infocase['notes']),
-          _notes(infocase['notes']),
+          _prognosis(controller, infocase['prognosis'], isEdit),
+          _diagnosis(controller, infocase['diagnosis'], isEdit),
+          _treatment(controller, infocase['treatment'], isEdit),
+          _reports(bioCards, isEdit),
+          _notes(controller, infocase['notes'], isEdit),
+          _notes(controller, infocase['notes'], isEdit),
         ]
       ),
-    )
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        print('edit');
+        setEditStatus();
+        print("save");
+        print(controller.value.text);
+        if(isEdit) {
+          _info['case']['prognosis'] = controller.value.text;
+          db.updatePatientInvestigateData(patientID, _info);
+        }
+      },
+      child: editIcon,
+      backgroundColor: Colors.green,
+    ),
   )
   ,
   );
@@ -395,11 +442,11 @@ Widget _patientInvestigation(Map<String, dynamic> infocase, List<Widget> bioCard
 class __patientDetailsState extends State<_patientDetails> {
 
   bool isPublic = false;
+  bool isEdit = false;
   String publicLabel = "Private";
 
   @override
   Widget build(BuildContext context) {
-    print(widget.patientInfo);
 
     void setPublicStatus(isPublic){
       print("setting status");
@@ -407,6 +454,15 @@ class __patientDetailsState extends State<_patientDetails> {
         isPublic = !isPublic;
       });
     }
+
+    void setEditStatus(){
+      print("setting Edit status");
+      setState(() {
+        isEdit = !isEdit;
+      });
+    }
+    print("edit");
+    print(isEdit);
 
     if (!widget.patientSet) {
       return Scaffold(
@@ -416,8 +472,13 @@ class __patientDetailsState extends State<_patientDetails> {
     );
 
     } else {
-      Map<String, dynamic> info = widget.patientInfo.infoJson['info'];
-      Map<String, dynamic> infocase = widget.patientInfo.infoJson['case'];
+      Map<String, dynamic> info = widget.patientInfo.infoJson;
+      
+
+      print("====");
+      print(info);
+      print("====");
+
       List<Widget> bioCards = new List();
 
       for (var key in widget.patientInfo.infoJson.keys) {
@@ -425,12 +486,10 @@ class __patientDetailsState extends State<_patientDetails> {
           continue;
         }
         List<Widget> bioDetailsCards = new List();
-        print("--- "+ key+" ---");
         Map<String, dynamic> payloadvalue = widget.patientInfo.infoJson[key];
         for (var label in payloadvalue.keys) {
           Map<String, dynamic> secDetails = payloadvalue[label];
           for (var marker in secDetails.keys) {
-            print(marker+": "+secDetails[marker]);
             bioDetailsCards.add(
               Card(
                 child: _lableValue(marker, secDetails[marker]),
@@ -439,7 +498,6 @@ class __patientDetailsState extends State<_patientDetails> {
           }
         }
         bioCards.add(_bioCard(key, bioDetailsCards));
-        print("------");
       }
 
       return Scaffold(
@@ -458,7 +516,7 @@ class __patientDetailsState extends State<_patientDetails> {
               flex: 8,
               child: Container(
                 padding: EdgeInsets.all(10.0),
-                child: _patientInvestigation(infocase, bioCards),
+                child: _patientInvestigation(info, bioCards, isEdit, setEditStatus, widget.db),
               ),
             ),
           ],
@@ -495,7 +553,7 @@ class _patientsTabState extends State<patientsTab> {
           Flexible(
             flex: 1,
             child: Center(
-              child: _patientDetails(widget.patients.setFlag, widget.patients.currentPatient),
+              child: _patientDetails(widget.patients.setFlag, widget.patients.currentPatient, widget.db),
             ),
           ),
         ],
