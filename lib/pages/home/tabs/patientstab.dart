@@ -91,153 +91,64 @@ class _patientDetails extends StatefulWidget {
   __patientDetailsState createState() => __patientDetailsState();
 }
 
-  Widget _nameCard(Map<String, dynamic> _info) {
-    Map<String, dynamic> info = _info['info'];
-    print("name card");
-    print(info);
-    print("====");
-    String prf = info['profileImage'];
-    String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}";
-    String line1 = info['name']+" ("+info['id']+")";
-    String line2 = "age: "+info['age']+" gender: "+info['gender'];
-    String line3 = info['race'];
-    bool isSwitched = false;
+Widget _nameCard(Map<String, dynamic> _info) {
+  Map<String, dynamic> info = _info['info'];
+  print("name card");
+  print(info);
+  print("====");
+  String prf = info['profileImage'];
+  String profileImageUrl = "https://vivly.s3-us-west-2.amazonaws.com/profileImages/${prf}";
+  String line1 = info['name']+" ("+info['id']+")";
+  String line2 = "age: "+info['age']+" gender: "+info['gender'];
+  String line3 = info['race'];
+  bool isSwitched = false;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Flexible(
-          flex: 2,
-          child: Container(
-            width: 100,
-            height: 100,
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: NetworkImage(profileImageUrl),
-                fit: BoxFit.fill,
-              )
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+      Flexible(
+        flex: 2,
+        child: Container(
+          width: 100,
+          height: 100,
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: NetworkImage(profileImageUrl),
+              fit: BoxFit.fill,
             )
+          )
+        ),
+      ),
+      Flexible(
+        flex: 6,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: fontText(line1, 'Roboto', true, Colors.black, 2),
+              ),
+              Flexible(
+                flex: 1,
+                child: fontText(line2, 'Roboto', true, Colors.black26, 1.5),
+              ),
+              Flexible(
+                flex: 1,
+                child: fontText(line3, 'Roboto', true, Colors.black26, 1.5),
+              ),
+            ],
           ),
         ),
-        Flexible(
-          flex: 6,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: fontText(line1, 'Roboto', true, Colors.black, 2),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: fontText(line2, 'Roboto', true, Colors.black26, 1.5),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: fontText(line3, 'Roboto', true, Colors.black26, 1.5),
-                ),
-              ],
-            ),
-          ),
-        ),      
-      ],
-    );
-  }
-
-Widget _detailsCard(Map<String, dynamic> infodetails) {
-  String line1 = "Prognosis : " + infodetails['prognosis'];
-  String line2 = "Diagnosis : " + infodetails['diagnosis'];
-  String line3 = infodetails['details'];
-  List<dynamic> symptoms = infodetails['symptoms'];
-  List<Widget> _symptomscard = new List();
-  if (symptoms.length == 0 ){
-    _symptomscard.add(
-        Card(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            child: Text('No Symptoms'),
-          ),
-        )
-      );
-  } else {
-    for (var symp in symptoms) {
-      _symptomscard.add(
-        Card(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            child: Text(symp),
-          ),
-        )
-      );
-    }
-  }
-
-  return Card(
-    child: Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            child: fontText(line1, 'Esteban', true, Colors.black, 2),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            child: fontText(line2, 'Esteban', true, Colors.black, 2),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            child: Container(
-              height: 35.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: _symptomscard,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            child: fontText(line3, 'Esteban', true, Colors.black26, 1.8),
-          )
-        ],
-      ),
-    ),
+      ),      
+    ],
   );
 }
 
-Widget _bioCard(String label, List<Widget> details){
-  return Card(
-    child: Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: fontText(label, 'Esteban', true, Colors.black, 2),
-            ),
-          ),
-          Expanded(
-            flex: 9,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: SizedBox(
-                child: new ListView(
-                  children: details,
-                ),
-              ), 
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _lableValue(String label, String value){  
+Widget _bioValues(String smarker, String value){
+  print("===> secondary marker ${smarker}: ${value}");
   return Row(
     children: <Widget>[
       Flexible(
@@ -251,7 +162,7 @@ Widget _lableValue(String label, String value){
       SizedBox(width: 10,),
       Flexible(
         flex: 2,
-        child: fontText(label, 'Esteban', false, Colors.black, 1.8),
+        child: fontText(smarker, 'Esteban', false, Colors.black, 1.8),
       ),
       SizedBox(width: 10,),
       Flexible(
@@ -260,74 +171,115 @@ Widget _lableValue(String label, String value){
       )
     ],
   );
-  
 }
 
-Widget _prognosis(TextEditingController controller, String prognosisDetails, bool isEdit) {
-  
-  if (isEdit) {
-    controller.text = prognosisDetails;
-    /*
-    controller.addListener(() {
-      prognosisDetails = controller.value.text;
-    });
-    */
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: TextField(
-        maxLines: 20,
-        controller: controller,
-      )
-    );
-  } else {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Text(prognosisDetails),
-    );
-  }
-  
-}
-
-Widget _diagnosis(TextEditingController controller, String diagnosisDetails, bool isEdit) {
-  return Container(
-    padding: EdgeInsets.all(10.0),
-    child: Text(diagnosisDetails),
-  );
-}
-
-Widget _treatment(TextEditingController controller, String treatmentDetails, bool isEdit) {
-  return Container(
-    padding: EdgeInsets.all(10.0),
-    child: Text(treatmentDetails),
-  );
-}
-
-Widget _notes(TextEditingController controller, String notesDetails, bool isEdit) {
-  return Container(
-    padding: EdgeInsets.all(10.0),
-    child: Text(notesDetails),
-  );
-}
-
-Widget _reports(List<Widget> bioCards, bool isEdit) {
-  return Container(
-    padding: EdgeInsets.all(10.0),
-    child: Scaffold(
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: bioCards,
+Widget _bioCard(String cardLabel, Map<String, dynamic> reportsDetail) {
+  Map<String, dynamic> reportsDetails = reportsDetail[cardLabel];
+  List<Widget> secCardDetails = reportsDetails.keys.map((smarker) => _bioValues(smarker, reportsDetails[smarker])).toList();
+  return Card(
+    child: Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: fontText(cardLabel, 'Esteban', true, Colors.black, 2),
+            ),
+          ),
+          Expanded(
+            flex: 9,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: SizedBox(
+                child: new ListView(children: secCardDetails),
+              )
+            ),
+          ),
+        ],
       ),
-    ),
+    )
   );
 }
 
-Widget _patientInvestigation(Map<String, dynamic> _info, List<Widget> bioCards, 
-  bool isEdit, setEditStatus, DatabaseService db) {
+List<Widget> getbioCards(Map<String, dynamic> reportsDetails){
+  List<Widget> bioCards = reportsDetails.keys.map((plable) => _bioCard(plable.toString(), reportsDetails)).toList();
+  return bioCards;
+}
+
+Widget _reports(Map<String, dynamic> reportsDetails, bool isEdit, setReportView, int tabIndex) {
+  List<String> tabLabel = reportsDetails.keys.map((lable) => lable.toString()).toList();
+ 
+  return DefaultTabController(
+    length: tabLabel.length,
+    initialIndex: tabIndex,
+    child: Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.delete),
+          tooltip: 'Delete this patient record',
+          onPressed: () {
+            print("Delete this patient record");
+          }
+        ),
+        bottom: TabBar(
+          onTap: (int index) {
+            tabIndex = index;
+            setReportView(tabIndex);
+          },
+          tabs: tabLabel.map((label) => Tab(child: fontText(label, 'Montserrat', false, Colors.white, 1.3))).toList(),
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          children: getbioCards(reportsDetails[tabLabel[tabIndex]]),
+        )
+      )
+    )
+  );
+  
+}
+
+Widget _investigateDetailsPage(String label, Map<String, dynamic> _info, TextEditingController controller, bool isEdit, setReportView, int tabIndex) {
+  Map<String, dynamic> infocase = _info['case'];
+  print(label);
+  if (label == "Reports") {
+    return _reports(infocase['Reports'], isEdit, setReportView, tabIndex);
+  } else {
+    String details = infocase[label].toString();
+    print("case ${label} : ${details}");
+    if (isEdit) {
+      controller.text = details;
+      return Container(
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+          maxLines: 20,
+          controller: controller,
+        )
+      );
+    } else {
+      return Container(
+        padding: EdgeInsets.all(10.0),
+        child: Text(details),
+      );
+    }
+  }
+}
+
+
+
+Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditStatus, DatabaseService db, setReportView, int reportTabIndex) {
 
   String patientID = _info['info']['id'];
-  Map<String, dynamic> infocase = _info['case'];
+  
+  List<String> tabLabel = ['Prognosis', 'Diagnosis', 'Treatment', 'Reports', 'Documents', 'Notes'];
+
 
   Icon editIcon;
+  int tabIndex = 0;
+  
   TextEditingController controller = TextEditingController();
 
   if(isEdit) {
@@ -337,7 +289,8 @@ Widget _patientInvestigation(Map<String, dynamic> _info, List<Widget> bioCards,
   }
   
   return DefaultTabController(
-    length: 6,
+    length: tabLabel.length,
+    initialIndex: tabIndex,
     child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -385,38 +338,15 @@ Widget _patientInvestigation(Map<String, dynamic> _info, List<Widget> bioCards,
           ),
         ],
         bottom: TabBar(
-          tabs: <Widget>[
-            Tab(
-              child: fontText('Prognosis', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            Tab(
-              child: fontText('Diagnosis', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            Tab(
-              child: fontText('Treatment', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            Tab(
-              child: fontText('Reports', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            Tab(
-              child: fontText('Documents', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            Tab(
-              child: fontText('Notes', 'Montserrat', false, Colors.white, 1.3),
-            ),
-            ],
+          onTap: (int index) {
+            tabIndex = index;
+          },
+          tabs: tabLabel.map((label) => Tab(child: fontText(label, 'Montserrat', false, Colors.white, 1.3))).toList(),
           )
         ),
     body: Container(
       child: TabBarView(
-        children: <Widget>[
-          _prognosis(controller, infocase['prognosis'], isEdit),
-          _diagnosis(controller, infocase['diagnosis'], isEdit),
-          _treatment(controller, infocase['treatment'], isEdit),
-          _reports(bioCards, isEdit),
-          _notes(controller, infocase['notes'], isEdit),
-          _notes(controller, infocase['notes'], isEdit),
-        ]
+        children: tabLabel.map((label) => _investigateDetailsPage(label, _info, controller, isEdit, setReportView, reportTabIndex)).toList(),
       ),
     ),
     floatingActionButton: FloatingActionButton(
@@ -426,12 +356,13 @@ Widget _patientInvestigation(Map<String, dynamic> _info, List<Widget> bioCards,
         print("save");
         print(controller.value.text);
         if(isEdit) {
-          _info['case']['prognosis'] = controller.value.text;
+          _info['case'][tabLabel[tabIndex]] = controller.value.text;
           db.updatePatientInvestigateData(patientID, _info);
         }
       },
       child: editIcon,
       backgroundColor: Colors.green,
+      elevation: 0.0,
     ),
   )
   ,
@@ -444,6 +375,8 @@ class __patientDetailsState extends State<_patientDetails> {
   bool isPublic = false;
   bool isEdit = false;
   String publicLabel = "Private";
+  int tabIndex = 0;
+  int reportIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -459,6 +392,13 @@ class __patientDetailsState extends State<_patientDetails> {
       print("setting Edit status");
       setState(() {
         isEdit = !isEdit;
+      });
+    }
+
+    void setReportView(int curIndex){
+      print("report view");
+      setState(() {
+        reportIndex = curIndex;
       });
     }
     print("edit");
@@ -481,6 +421,7 @@ class __patientDetailsState extends State<_patientDetails> {
 
       List<Widget> bioCards = new List();
 
+      /*
       for (var key in widget.patientInfo.infoJson.keys) {
         if( key == "info" || key == "case" ){
           continue;
@@ -499,6 +440,7 @@ class __patientDetailsState extends State<_patientDetails> {
         }
         bioCards.add(_bioCard(key, bioDetailsCards));
       }
+      */
 
       return Scaffold(
         body: Column(
@@ -516,7 +458,7 @@ class __patientDetailsState extends State<_patientDetails> {
               flex: 8,
               child: Container(
                 padding: EdgeInsets.all(10.0),
-                child: _patientInvestigation(info, bioCards, isEdit, setEditStatus, widget.db),
+                child: _patientInvestigation(info, isEdit, setEditStatus, widget.db, setReportView, reportIndex),
               ),
             ),
           ],

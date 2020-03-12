@@ -28,10 +28,6 @@ class Patients {
       await firestore.collection('PatientDetails').doc(patientId).get().then((snapshot) {
         if(snapshot.exists) {
           Map<String, dynamic> data = snapshot.data();
-          print("--");
-          print("fb data");
-          print(data);
-          print("--");
           Patient _patient = Patient(infoJson: data);
           this.patientDetails.add(_patient);
         } else {
