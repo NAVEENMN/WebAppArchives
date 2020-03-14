@@ -89,7 +89,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.people),
                   SizedBox(width: 2,),
-                  fontText('Patients', 'Montserrat', false, Colors.white, 1.5),
+                  fontText('My Patients', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -99,7 +99,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.chat),
                   SizedBox(width: 2,),
-                  fontText('Reports', 'Montserrat', false, Colors.white, 1.5),
+                  fontText('Public Cases', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),

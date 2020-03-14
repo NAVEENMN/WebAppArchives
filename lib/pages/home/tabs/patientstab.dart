@@ -30,7 +30,7 @@ Widget listPatients(Patients patients, setPatientDetails) {
     children: <Widget>[
       Container(
         height: 500,
-        color: pallet.shadePolite4,
+        color: pallet.shadeWhite,
         child: FutureBuilder(
           future: _getpatients(patients),
           builder: (BuildContext context, AsyncSnapshot snapshot){
