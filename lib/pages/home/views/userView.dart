@@ -3,6 +3,7 @@ import 'package:app/models/pallet.dart';
 import 'package:app/models/patients.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/home/tabs/patientstab.dart';
+import 'package:app/pages/home/tabs/reportstab.dart';
 import 'package:app/pages/wrapper.dart';
 import 'package:app/services/firebasedb.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class _userViewState extends State<userView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: fontText('Dashboard', 'Montserrat', true, Colors.white, 1.5),
+        title: fontText('HELIX', 'Montserrat', true, Colors.white, 1.5),
         centerTitle: true,
         backgroundColor: widget.utils.pallet.shadePolite0,
         bottom: TabBar(
@@ -98,7 +99,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.chat),
                   SizedBox(width: 2,),
-                  fontText('Accounts', 'Montserrat', false, Colors.white, 1.5),
+                  fontText('Reports', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -108,7 +109,7 @@ class _userViewState extends State<userView> {
                 children: <Widget>[
                   Icon(Icons.assignment),
                   SizedBox(width: 2,),
-                  fontText('Research', 'Montserrat', false, Colors.white, 1.5),
+                  fontText('Research Metrics', 'Montserrat', false, Colors.white, 1.5),
                 ],
               ),
             ),
@@ -165,10 +166,10 @@ class _userViewState extends State<userView> {
                   child: patientsTab(widget.usr, Patients(widget.usr), widget.utils.fdb),
                 ),
                 Center(
-                  child: Text('To be implemented'),
+                  child: reportsTab(widget.usr, widget.utils.fdb),
                 ),
                 Center(
-                  child: Text('To be implemented'),
+                  child: Text('Reseach topics of you intrests and curated medical stats will appear here'),
                   )
                 ],
                 ),

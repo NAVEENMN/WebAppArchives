@@ -148,7 +148,6 @@ Widget _nameCard(Map<String, dynamic> _info) {
 }
 
 Widget _bioValues(String smarker, String value){
-  print("===> secondary marker ${smarker}: ${value}");
   return Row(
     children: <Widget>[
       Flexible(
@@ -242,16 +241,13 @@ Widget _reports(Map<String, dynamic> reportsDetails, bool isEdit, setReportView,
   
 }
 
-Widget _investigateDetailsPage(String label, Map<String, dynamic> _info, TextEditingController controller, bool isEdit, setReportView, int tabIndex) {
-  Map<String, dynamic> infocase = _info['case'];
-  print(label);
+Widget _investigateDetailsPage(String label, Map<String, dynamic> infocase, TextEditingController controller, bool isEdit, setReportView, int tabIndex) {
   if (label == "Reports") {
     return _reports(infocase['Reports'], isEdit, setReportView, tabIndex);
   } else {
-    String details = infocase[label].toString();
-    print("case ${label} : ${details}");
     if (isEdit) {
-      controller.text = details;
+      controller.text = infocase[label];
+      print("case ${label} : ${infocase[label]}");
       return Container(
         padding: EdgeInsets.all(10.0),
         child: TextField(
@@ -262,20 +258,17 @@ Widget _investigateDetailsPage(String label, Map<String, dynamic> _info, TextEdi
     } else {
       return Container(
         padding: EdgeInsets.all(10.0),
-        child: Text(details),
+        child: Text(infocase[label]),
       );
     }
   }
 }
 
-
-
-Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditStatus, DatabaseService db, setReportView, int reportTabIndex) {
+Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditStatus, widget, setReportView, int reportTabIndex) {
 
   String patientID = _info['info']['id'];
   
   List<String> tabLabel = ['Prognosis', 'Diagnosis', 'Treatment', 'Reports', 'Documents', 'Notes'];
-
 
   Icon editIcon;
   int tabIndex = 0;
@@ -293,13 +286,7 @@ Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditSta
     initialIndex: tabIndex,
     child: Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.delete),
-          tooltip: 'Delete this patient record',
-          onPressed: () {
-            print("Delete this patient record");
-          }
-        ),
+        title: Text(_info['info']['id']),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.send),
@@ -340,25 +327,27 @@ Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditSta
         bottom: TabBar(
           onTap: (int index) {
             tabIndex = index;
+            if(tabLabel[tabIndex] != "Reports") {
+              controller.text = _info['case'][tabLabel[tabIndex]];
+            }
           },
           tabs: tabLabel.map((label) => Tab(child: fontText(label, 'Montserrat', false, Colors.white, 1.3))).toList(),
-          )
-        ),
+        )
+    ),
     body: Container(
       child: TabBarView(
-        children: tabLabel.map((label) => _investigateDetailsPage(label, _info, controller, isEdit, setReportView, reportTabIndex)).toList(),
+        children: tabLabel.map((label) => _investigateDetailsPage(label, _info['case'], controller, isEdit, setReportView, reportTabIndex)).toList(),
       ),
     ),
     floatingActionButton: FloatingActionButton(
       onPressed: () {
-        print('edit');
-        setEditStatus();
-        print("save");
-        print(controller.value.text);
         if(isEdit) {
-          _info['case'][tabLabel[tabIndex]] = controller.value.text;
-          db.updatePatientInvestigateData(patientID, _info);
+          print("payload: ${controller.value.text}");
+          //_info['case'][tabLabel[tabIndex]] = controller.value.text;
+          // widget.db.updatePatientInvestigateData(patientID, _info);
         }
+        print('edit: ${isEdit}');
+        setEditStatus();
       },
       child: editIcon,
       backgroundColor: Colors.green,
@@ -370,6 +359,13 @@ Widget _patientInvestigation(Map<String, dynamic> _info, bool isEdit, setEditSta
   
 }
 
+class reportState{
+  int reportIndex = 0;
+  bool isEdit = false;
+  bool isPublic = false;
+  int tabIndex = 0;
+}
+
 class __patientDetailsState extends State<_patientDetails> {
 
   bool isPublic = false;
@@ -377,6 +373,8 @@ class __patientDetailsState extends State<_patientDetails> {
   String publicLabel = "Private";
   int tabIndex = 0;
   int reportIndex = 0;
+
+  reportState repstate = reportState(); 
 
   @override
   Widget build(BuildContext context) {
@@ -401,8 +399,6 @@ class __patientDetailsState extends State<_patientDetails> {
         reportIndex = curIndex;
       });
     }
-    print("edit");
-    print(isEdit);
 
     if (!widget.patientSet) {
       return Scaffold(
@@ -413,58 +409,14 @@ class __patientDetailsState extends State<_patientDetails> {
 
     } else {
       Map<String, dynamic> info = widget.patientInfo.infoJson;
-      
-
+      /*
       print("====");
       print(info);
       print("====");
-
-      List<Widget> bioCards = new List();
-
-      /*
-      for (var key in widget.patientInfo.infoJson.keys) {
-        if( key == "info" || key == "case" ){
-          continue;
-        }
-        List<Widget> bioDetailsCards = new List();
-        Map<String, dynamic> payloadvalue = widget.patientInfo.infoJson[key];
-        for (var label in payloadvalue.keys) {
-          Map<String, dynamic> secDetails = payloadvalue[label];
-          for (var marker in secDetails.keys) {
-            bioDetailsCards.add(
-              Card(
-                child: _lableValue(marker, secDetails[marker]),
-              )
-            );
-          }
-        }
-        bioCards.add(_bioCard(key, bioDetailsCards));
-      }
       */
-
-      return Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Flexible(
-              flex: 2,
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: _nameCard(info),
-              ),
-            ),
-            Flexible(
-              flex: 8,
-              child: Container(
-                padding: EdgeInsets.all(10.0),
-                child: _patientInvestigation(info, isEdit, setEditStatus, widget.db, setReportView, reportIndex),
-              ),
-            ),
-          ],
-        ),
+      return Container(
+        child: _patientInvestigation(info, isEdit, setEditStatus, widget, setReportView, reportIndex),
       );
-
     }
   }
 }
