@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "565175541289",
+    "firebase_url": "https://biom-8ce5e.firebaseio.com",
+    "project_id": "biom-8ce5e",
+    "storage_bucket": "biom-8ce5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565175541289:android:dd4e9bc840535b70280638",
+        "android_client_info": {
+          "package_name": "com.bio.bio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565175541289-j2ef6cudepaajk621tpvan2k52931bg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZMfMAmWwanRdaJGawwjLY_Nvs7gyqEH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565175541289-j2ef6cudepaajk621tpvan2k52931bg0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
