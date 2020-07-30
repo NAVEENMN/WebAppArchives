@@ -1,0 +1,98 @@
+{
+  "m_1": {
+    "id": "m_1",
+    "isUpdate": true,
+    "title": "Dr",
+    "name": {
+      "firstName": "kenny",
+      "lastName": "xu"
+    },
+    "gender": "m",
+    "location": {
+      "cityName": "milpitas",
+      "stateName": "ca",
+      "countryName": "usa",
+      "zipCode": "95035"
+    },
+    "education": {
+      "degreeName": "mbbs",
+      "universityName": "uncc"
+    },
+    "profession": {
+      "designation": "md",
+      "specialities": ["pediatrician", "family health", "fitness"],
+      "description": "dr. kenny is exprienced in bla bla bla and has over bla year of"
+    },
+    "languages": ["german", "mandarian", "english"],
+    "areas": ["depression", "stress"],
+    "profilePicture": "prf.jpg",
+    "contact" : {
+      "email": "kenny@gmail.com",
+      "phone": null
+    }
+  },
+  "m_2": {
+    "id": "m_2",
+    "isUpdate": true,
+    "title": "Dr",
+    "name": {
+      "firstName": "darrel",
+      "lastName": "p"
+    },
+    "gender": "m",
+    "location": {
+      "cityName": "milpitas",
+      "stateName": "ca",
+      "countryName": "usa",
+      "zipCode": "95035"
+    },
+    "education": {
+      "degreeName": "mbbs",
+      "universityName": "uncc"
+    },
+    "profession": {
+      "designation": "md",
+      "specialities": ["mind health", "cognitive developement", "nutrition"],
+      "description": "dr. darrel is exprienced in bla bla bla and has over bla year of"
+    },
+    "languages": ["german", "hindi", "english"],
+    "areas": ["cognitive behavioural", "addictions", "trauma"],
+    "profilePicture": "prf.jpg",
+    "contact" : {
+      "email": "darrel@gmail.com",
+      "phone": null
+    }
+  },
+  "m_3": {
+    "id": "RC1AymdClNV791lk5Ls78zVlSzq1",
+    "isUpdate": true,
+    "title": "Dr",
+    "name": {
+      "firstName": "vijay",
+      "lastName": "M"
+    },
+    "gender": "m",
+    "location": {
+      "cityName": "milpitas",
+      "stateName": "ca",
+      "countryName": "usa",
+      "zipCode": "95035"
+    },
+    "education": {
+      "degreeName": "mbbs",
+      "universityName": "uncc"
+    },
+    "profession": {
+      "designation": "md",
+      "specialities": ["stress Management", "diet", "physical health"],
+      "description": "dr. vijay is exprienced in bla bla bla and has over bla year of"
+    },
+    "languages": ["kannada", "hindi", "english"],
+    "areas": ["depression", "stress", "addictions", "trauma"],
+    "profilePicture": "prf.jpg",
+    "contact" : {
+      "email": "vijay@gmail.com",
+      "phone": null
+    }
+  }
+}

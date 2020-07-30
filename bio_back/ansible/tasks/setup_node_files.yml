@@ -1,0 +1,9 @@
+- name: Copy the files into webapp directory
+  shell: "{{ item }}"
+  loop:
+    - "cp /home/ubuntu/tmp/webapp/webapp/views/index.ejs /home/ubuntu/webapp/views/index.ejs"
+    - "cp /home/ubuntu/tmp/webapp/webapp/public/javascripts/mapboxgl-control-minimap.js /home/ubuntu/webapp/public/javascripts/mapboxgl-control-minimap.js"
+    - "cp /home/ubuntu/tmp/webapp/webapp/public/stylesheets/style.css /home/ubuntu/webapp/public//stylesheets/style.css"
+
+- debug:
+    msg: "DEBUG=webapp:* npm start"

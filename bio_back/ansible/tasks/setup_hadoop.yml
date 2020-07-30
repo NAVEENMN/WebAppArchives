@@ -1,0 +1,25 @@
+- name: Update system
+  shell: apt-get update
+- name: Install jdk
+  shell: apt install default-jdk
+- name: Install unzip
+  shell: sudo apt-get install unzip
+- name: Download hadoop
+  shell: wget https://downloads.apache.org/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz
+- name: unpack contents
+  shell: tar -xzvf hadoop-3.2.1.tar.gz
+- name: move the contents to /usr/local/hadoop
+  shell: sudo mv hadoop-3.2.1 /usr/local/hadoop
+- name: set jdk path in hadoop config file
+  lineinfile:
+    path: /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+    line: export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+- name: execute java code
+  shell: javac -classpath ${HADOOP_CLASSPATH} -d ~/src WordCount.java
+- name: create jar file
+  shell: jar -cvf WordCount.jar -C ~/src .
+- name: excute jar
+  shell: /usr/local/hadoop/bin/hadoop jar WordCount.jar org.nmysore.WordCount ~/input/ ~/output
+
+
+    
