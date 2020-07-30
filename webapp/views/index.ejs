@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+    <% include partials/menu %>
+
+    <div id='satellite' class='map'></div>
+    <div id='streets' class='map'></div>
+    <div id='cursor_info' class='map-overlay top'>
+      <div class='map-overlay-inner'>
+        <label>Inspection Map</label>
+      </div>
+    </div>
+
+    <div class='map-overlay top'>
+      <div class='map-overlay-inner'>
+        <fieldset>
+          <label>Inspection Map</label>
+          <select id='layer' name='layer' onchange="changeLayer();" onfocus="this.selectedIndex = -1;">
+            <option value='satellite'>satellite-v9</option>
+            <option value='building'>streets-v11</option>
+          </select>
+        </fieldset>
+        <label>Geometry</label>
+        <text id='info'></text>
+      </div>
+    </div>
+  </body>
+  
+  <% include partials/script %>
+</html>
